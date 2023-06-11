@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es2017",                       // Versão do EcmaScript
+    "lib": ["es6"],
+    "allowJs": true,                          // Permite importar arquvio Javascript dentro de arquivos TypeScript
+    "outDir": "./dist",                       // Pasta para o build da aplicação
+    "rootDir": "./src",                       // Local onde ficam os arquivos T(não pode retornar null de função tipada para retornar string)
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "commonjs",        
+    // Permite sobrscrever tipagem de outras bibliotecas TypeScript
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types"
+    ],
+    "resolveJsonModule": true,                // Permite importar arquivos JSON dentro do código          
+    "removeComments": true,                   // Remove comentários durante o build
+    "esModuleInterop": true,                  // Habilita o uso de Decorators (Ex.: em ORM's)
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,                          // Força o uso de tipagem em tudo 
+    "noEmitOnError": true,
+    //"strictNullChecks": true,
+    "skipLibCheck": true
+  },
+   // Config do Jest para poder fazer o import do tsconfig.json em jest.config.js
+  // Faz com que o TypeScript não compile o arquivo jest.config.js            
+  "include": [
+    "src/**/*"
+  ]
+}
