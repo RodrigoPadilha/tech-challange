@@ -1,8 +1,12 @@
-import name, { mid_name, last_name, NOVO_NOME } from "@config/minha-config";
+import express from "express";
+import { PORT } from "@config/minha-config";
 
-function hello(aux?: string) {
-  return `Hello ${aux || name} ${mid_name} ${last_name}`;
-}
+const app = express();
 
-console.log(hello("João"));
-console.log(hello(NOVO_NOME));
+app.get("/", (req, resp) => {
+  resp.send("Hello World");
+});
+
+app.listen(PORT, () => {
+  console.log(`Server runnig on http://localhost:${PORT}`);
+});
