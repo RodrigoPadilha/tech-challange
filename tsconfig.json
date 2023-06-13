@@ -22,15 +22,15 @@
     //"strictNullChecks": true,
     "skipLibCheck": true,
     "baseUrl": ".",     // Caminho inicial para o path fazer o mapeamento
-      "paths": {
-        // Sempre que um import iniciar com "@models" é feito um mapeamento para o caminho do array
-        "@models/*": [            
-          "./src/models/*"
-        ],
-        "@config/*": [
-          "./src/config/*"
-        ]
-      },
+    "paths": {
+      // Sempre que um import iniciar com "@models" é feito um mapeamento para o caminho do array
+      "@models/*": [ 
+        "./src/models/*"
+      ],
+      "@config/*": [
+        "./src/config/*"
+      ]
+    },
   },
    // Config do Jest para poder fazer o import do tsconfig.json em jest.config.js
   // Faz com que o TypeScript não compile o arquivo jest.config.js            
