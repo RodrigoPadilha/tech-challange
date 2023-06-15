@@ -8,8 +8,8 @@ services:
     container_name: Tech_1_backend  
     ports:
       - '3000:3000'
-    volumes:
-      - ./dist:/app/dist
+#    volumes:
+#      - ./dist:/app/dist
     command: npm start
     networks:
       - tech_network
