@@ -12,7 +12,10 @@ services:
       - .:/app
     command: npm run dev
     environment:
-        - NODE_ENV=development
+        - SERVER_PORT=${SERVER_PORT}
+        - ENVIRONMENT=${NODE_ENV} # production | development
+        - DB_HOST=${DB_HOST}
+        - DB_PORT=${DB_PORT}
     networks:
       - tech_network
     depends_on:
