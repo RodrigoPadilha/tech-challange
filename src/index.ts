@@ -8,5 +8,7 @@ app.get("/", (req, resp) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server runnig on http://localhost:${PORT}`);
+  console.log(
+    `Server runnig on http://localhost:${PORT} in ${process.env.NODE_ENV}`
+  );
 });
