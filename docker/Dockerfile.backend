@@ -6,16 +6,19 @@ WORKDIR /app
 
 # Copie o arquivo package.json e package-lock.json para o diretório de trabalho
 # COPY ./package*.json ./
-COPY package*.json .
+#COPY package*.json .
+
+# Copie os arquivos do projeto para o diretório de trabalho
+COPY ../. .
 
 # Instale as dependências do projeto
 RUN npm install
 
-# Copie os arquivos do projeto para o diretório de trabalho
-COPY . .
-
 # Compile o código TypeScript
 RUN npm run build
+
+# Exponha a porta em que o servidor irá rodar
+EXPOSE 3000
 
 # Defina o comando de inicialização do container
 CMD ["node", "dist/index.js"]

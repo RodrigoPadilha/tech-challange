@@ -3,23 +3,24 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: docker/Dockerfile.backend
     image: tech_fase_1_backend
     container_name: Tech_1_backend  
     ports:
       - '3000:3000'
-#    volumes:
-#      - ./dist:/app/dist
-    command: npm start
+    volumes:
+      - .:/app
+    command: npm run dev
+    environment:
+        - NODE_ENV=development
     networks:
       - tech_network
     depends_on:
       - db
-  
   db:
     build:
       context: .
-      dockerfile: Dockerfile.postgres
+      dockerfile: docker/Dockerfile.postgres
     image: tech_fase_1_db
     container_name: Tech_1_db
     ports:
