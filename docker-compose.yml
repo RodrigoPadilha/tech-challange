@@ -27,7 +27,9 @@ services:
     image: tech_fase_1_db
     container_name: Tech_1_db
     ports:
-      - '5432:5432'    
+      - '5432:5432'
+    volumes:
+      - ./db:/var/lib/postgresql/data
     networks:
       - tech_network
 
