@@ -1,4 +1,4 @@
-import { ClientEntity } from "@domain/entities/ClientEntity";
+import { ClientEntity } from "src/core/domain/entities/ClientEntity";
 import { IClientRepository } from "./ports/IClientRepository";
 
 type Input = {

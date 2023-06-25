@@ -1,6 +1,6 @@
 import { ExpressAdapter } from "@adapters/Driver/ExpressAdapter";
-import IHttpServer from "@application/ports/IHttpServer";
-import Router from "src/infra/api/Router";
+import IHttpServer from "src/core/application/ports/IHttpServer";
+import Router from "src/core/infra/api/Router";
 
 const httpServer: IHttpServer = new ExpressAdapter();
 const router = new Router(httpServer);

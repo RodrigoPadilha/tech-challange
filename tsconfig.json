@@ -28,10 +28,10 @@
         "./src/adapters/*"
       ],
       "@application/*": [ 
-        "./src/application/*"
+        "src/core/application/*"
       ],
       "@domain/*": [ 
-        "./src/domain/*"
+        "src/core/domain/*"
       ],
     },
   },

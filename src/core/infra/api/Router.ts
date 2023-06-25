@@ -1,8 +1,8 @@
-import IHttpServer from "@application/ports/IHttpServer";
+import IHttpServer from "src/core/application/ports/IHttpServer";
 import { ClientController } from "./controllers";
 import { ClientMemoryRepository } from "@adapters/Driven/ClientMemoryRepository";
-import { ListClientsUseCase } from "@application/ListClientsUseCase";
-import { CreateClientUseCase } from "@application/CreateClientUseCase";
+import { ListClientsUseCase } from "src/core/application/ListClientsUseCase";
+import { CreateClientUseCase } from "src/core/application/CreateClientUseCase";
 
 export default class Router {
   constructor(readonly httpServer: IHttpServer) {}

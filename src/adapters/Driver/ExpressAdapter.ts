@@ -1,6 +1,6 @@
 import { Server } from "http";
 import express, { Application, Request, Response } from "express";
-import IHttpServer from "@application/ports/IHttpServer";
+import IHttpServer from "src/core/application/ports/IHttpServer";
 
 export class ExpressAdapter implements IHttpServer {
   private app: Application;
