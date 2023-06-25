@@ -1,4 +1,5 @@
 import { ListClientsUseCase } from "@application/ListClientsUseCase";
+import { CreateClientUseCase } from "@application/CreateClientUseCase";
 import IHttpServer from "@application/ports/IHttpServer";
 
 export class ClientController {
@@ -15,6 +16,21 @@ export class ClientController {
           cpf: clientData.cpf,
         }));
         return clientsDto;
+      }
+    );
+  }
+
+  registerEndpointCreateClient(createClientUseCase: CreateClientUseCase) {
+    this.httpServer.register(
+      "post",
+      "/client",
+      async function (params: any, body: any) {
+        try {
+          await createClientUseCase.execute(body);
+          return { message: "Cliente criado com sucesso!" };
+        } catch (error) {
+          console.log(error);
+        }
       }
     );
   }
