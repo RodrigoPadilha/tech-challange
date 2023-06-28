@@ -1,4 +1,4 @@
-import { ClientEntity } from "src/core/domain/entities/ClientEntity";
+import { ClientEntity } from "@domain/entities/ClientEntity";
 
 export interface IClientRepository {
   save(client: ClientEntity): Promise<void>;

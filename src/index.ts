@@ -1,5 +1,5 @@
 import { ExpressAdapter } from "@adapters/Driver/ExpressAdapter";
-import IHttpServer from "src/core/application/ports/IHttpServer";
+import IHttpServer from "@application/ports/IHttpServer";
 import Router from "src/core/infra/api/Router";
 
 const httpServer: IHttpServer = new ExpressAdapter();

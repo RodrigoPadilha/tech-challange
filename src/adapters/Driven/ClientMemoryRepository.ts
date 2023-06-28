@@ -1,5 +1,5 @@
-import { IClientRepository } from "src/core/application/ports/IClientRepository";
-import { ClientEntity } from "src/core/domain/entities/ClientEntity";
+import { IClientRepository } from "@application/ports/IClientRepository";
+import { ClientEntity } from "@domain/entities/ClientEntity";
 
 export class ClientMemoryRepository implements IClientRepository {
   private clients: ClientEntity[];

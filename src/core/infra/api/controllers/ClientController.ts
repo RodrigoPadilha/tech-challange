@@ -1,6 +1,6 @@
-import { ListClientsUseCase } from "src/core/application/ListClientsUseCase";
-import { CreateClientUseCase } from "src/core/application/CreateClientUseCase";
-import IHttpServer from "src/core/application/ports/IHttpServer";
+import { ListClientsUseCase } from "@application/ListClientsUseCase";
+import { CreateClientUseCase } from "@application/CreateClientUseCase";
+import IHttpServer from "@application/ports/IHttpServer";
 
 export class ClientController {
   constructor(readonly httpServer: IHttpServer) {}
