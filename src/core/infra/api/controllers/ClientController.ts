@@ -1,6 +1,7 @@
 import { ListClientsUseCase } from "@application/ListClientsUseCase";
 import { CreateClientUseCase } from "@application/CreateClientUseCase";
 import IHttpServer from "@application/ports/IHttpServer";
+import { created, ok } from "src/core/util/http-helper";
 
 export class ClientController {
   constructor(readonly httpServer: IHttpServer) {}
@@ -15,7 +16,7 @@ export class ClientController {
           nome: clientData.name,
           cpf: clientData.cpf,
         }));
-        return clientsDto;
+        return ok(clientsDto);
       }
     );
   }
@@ -27,7 +28,7 @@ export class ClientController {
       async function (params: any, body: any) {
         try {
           await createClientUseCase.execute(body);
-          return { message: "Cliente criado com sucesso!" };
+          return created({ message: "Cliente criado com sucesso!" });
         } catch (error) {
           console.log(error);
         }
@@ -41,11 +42,11 @@ export class ClientController {
       "/client/:id",
       async function (params: any, body: any) {
         const id = params.id;
-        return {
+        return ok({
           id: id,
           nome: "Any Client",
           cpf: "000000000" + id,
-        };
+        });
       }
     );
   }
