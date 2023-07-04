@@ -13,11 +13,11 @@ export default class Router {
     const clientController = new ClientController(this.httpServer);
     const clientRepository = new ClientMemoryRepository();
 
-    const listClientsUseCase = new ListClientsUseCase(clientRepository);
-    clientController.registerEndpointGetClient(listClientsUseCase);
-
     const createClientUseCase = new CreateClientUseCase(clientRepository);
     clientController.registerEndpointCreateClient(createClientUseCase);
+    
+    const listClientsUseCase = new ListClientsUseCase(clientRepository);
+    clientController.registerEndpointGetClient(listClientsUseCase);
 
     //clientController.registerEndpointGetClientById();
   }

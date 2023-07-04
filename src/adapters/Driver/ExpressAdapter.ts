@@ -1,6 +1,7 @@
 import { Server } from "http";
 import express, { Application, Request, Response } from "express";
 import IHttpServer from "@application/ports/IHttpServer";
+import { HttpResponse } from "src/core/util/http-helper";
 
 export class ExpressAdapter implements IHttpServer {
   private app: Application;
@@ -28,8 +29,8 @@ export class ExpressAdapter implements IHttpServer {
     callback: Function
   ): Promise<void> {
     this.app[method](url, async function (req: Request, res: Response) {
-      const output = await callback(req.params, req.body);
-      res.json(output);
+      const output: HttpResponse = await callback(req.params, req.body);
+      res.status(output.statusCode).json(output.body);
     });
   }
 

@@ -1,7 +1,12 @@
 import { ListClientsUseCase } from "@application/ListClientsUseCase";
 import { CreateClientUseCase } from "@application/CreateClientUseCase";
 import IHttpServer from "@application/ports/IHttpServer";
-import { created, ok } from "src/core/util/http-helper";
+import {
+  HttpResponse,
+  badRequest,
+  created,
+  ok,
+} from "src/core/util/http-helper";
 
 export class ClientController {
   constructor(readonly httpServer: IHttpServer) {}
@@ -11,8 +16,11 @@ export class ClientController {
       "get",
       "/client",
       async function (params: any, body: any) {
-        const clientsData = await listClientsUseCase.execute();
-        const clientsDto = clientsData.map((clientData) => ({
+        const response = await listClientsUseCase.execute();
+        if (response.isLeft()) {
+          return badRequest({ error: response.value.message });
+        }
+        const clientsDto = response.value.map((clientData) => ({
           nome: clientData.name,
           cpf: clientData.cpf,
         }));
@@ -25,13 +33,12 @@ export class ClientController {
     this.httpServer.register(
       "post",
       "/client",
-      async function (params: any, body: any) {
-        try {
-          await createClientUseCase.execute(body);
-          return created({ message: "Cliente criado com sucesso!" });
-        } catch (error) {
-          console.log(error);
+      async function (params: any, body: any): Promise<HttpResponse> {
+        const response = await createClientUseCase.execute(body);
+        if (response.isLeft()) {
+          return badRequest({ error: response.value.message });
         }
+        return created({ message: "Cliente criado com sucesso!" });
       }
     );
   }
