@@ -11,7 +11,7 @@ import {
 export class ClientController {
   constructor(readonly httpServer: IHttpServer) {}
 
-  registerEndpointGetClient(listClientsUseCase: ListClientsUseCase) {
+  registerEndpointListAllClients(listClientsUseCase: ListClientsUseCase) {
     this.httpServer.register(
       "get",
       "/client",
