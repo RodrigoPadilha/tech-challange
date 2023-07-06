@@ -4,7 +4,7 @@ import { Either, left, right } from "src/shared/either";
 export class Cpf {
   private readonly value: string;
 
-  constructor(cpf: string) {
+  constructor(cpf: string = "") {
     this.value = cpf;
   }
 
@@ -13,13 +13,16 @@ export class Cpf {
   }
 
   private static isValidCpf(cpf: string) {
-    return cpf.length === 8;
+    if (cpf) {
+      return cpf.length === 11 || cpf.length === 0;
+    }
+    return true;
   }
 
   public static create(cpf: string): Either<InvalidCpfError, Cpf> {
     if (!this.isValidCpf(cpf)) {
-      return right(new Cpf(cpf));
+      return left(new InvalidCpfError(cpf));
     }
-    return left(new InvalidCpfError(cpf));
+    return right(new Cpf(cpf));
   }
 }

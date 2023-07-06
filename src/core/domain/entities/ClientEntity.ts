@@ -4,10 +4,12 @@ import { v4 as uuidv4 } from "uuid";
 export class ClientEntity {
   private readonly key: string;
   private readonly cpf: Cpf;
+  private readonly isAnonymous: boolean;
 
   constructor(cpf: Cpf) {
     this.key = uuidv4();
     this.cpf = cpf;
+    this.isAnonymous = cpf.getValue().length === 0;
   }
 
   getKey() {
@@ -16,5 +18,9 @@ export class ClientEntity {
 
   getCpf() {
     return this.cpf.getValue();
+  }
+
+  getIsAnonymous() {
+    return this.isAnonymous;
   }
 }

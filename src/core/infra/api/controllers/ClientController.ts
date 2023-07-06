@@ -12,21 +12,18 @@ export class ClientController {
   constructor(readonly httpServer: IHttpServer) {}
 
   registerEndpointListAllClients(listClientsUseCase: ListClientsUseCase) {
-    this.httpServer.register(
-      "get",
-      "/client",
-      async function (/* params: any, body: any */) {
-        const response = await listClientsUseCase.execute();
-        if (response.isLeft()) {
-          return badRequest({ error: response.value.message });
-        }
-        const clientsDto = response.value.map((clientData) => ({
-          cpf: clientData.getCpf(),
-          key: clientData.getKey(),
-        }));
-        return ok(clientsDto);
+    this.httpServer.register("get", "/client", async function () {
+      const response = await listClientsUseCase.execute();
+      if (response.isLeft()) {
+        return badRequest({ error: response.value.message });
       }
-    );
+      const clientsDto = response.value.map((clientData) => ({
+        cpf: clientData.getCpf(),
+        key: clientData.getKey(),
+        isAnonymous: clientData.getIsAnonymous(),
+      }));
+      return ok(clientsDto);
+    });
   }
 
   registerEndpointCreateClient(createClientUseCase: CreateClientUseCase) {
@@ -38,7 +35,15 @@ export class ClientController {
         if (response.isLeft()) {
           return badRequest({ error: response.value.message });
         }
-        return created({ message: "Cliente criado com sucesso!" });
+        const clientDto = {
+          key: response.value.getKey(),
+          cpf: response.value.getCpf(),
+          isAnonymous: response.value.getIsAnonymous(),
+        };
+        return created({
+          message: "Cliente criado com sucesso!",
+          client: clientDto,
+        });
       }
     );
   }
