@@ -10,6 +10,6 @@ export default class Router {
     const clientFactory = new ClientFactory(this.httpServer);
     clientFactory.makeCreateClientController();
     clientFactory.makeListAllClientsController();
-    //clientController.registerEndpointGetClientById();
+    clientFactory.makeGetClientByCpf();
   }
 }

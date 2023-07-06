@@ -1,5 +1,6 @@
 import { ListClientsUseCase } from "@application/ListClientsUseCase";
 import { CreateClientUseCase } from "@application/CreateClientUseCase";
+import { GetClientByCpfUseCase } from "@application/GetClientByCpfUseCase";
 import IHttpServer from "@application/ports/IHttpServer";
 import {
   HttpResponse,
@@ -48,12 +49,14 @@ export class ClientController {
     );
   }
 
-  registerEndpointGetClientById() {
+  registerEndpointGetClientByCpf(getClientByCpfUseCase: GetClientByCpfUseCase) {
     this.httpServer.register(
       "get",
       "/client/:id",
-      async function (params: any, body: any) {
+      async function (params: any, body: any, query: any) {
         const id = params.id;
+        console.log(params);
+        console.log(query);
         return ok({
           id: id,
           nome: "Any Client",

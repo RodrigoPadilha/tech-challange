@@ -3,6 +3,7 @@ import { ClientController } from "../infra/api/controllers";
 import { ClientMemoryRepository } from "@adapters/Driven/ClientMemoryRepository";
 import { CreateClientUseCase } from "@application/CreateClientUseCase";
 import { ListClientsUseCase } from "@application/ListClientsUseCase";
+import { GetClientByCpfUseCase } from "@application/GetClientByCpfUseCase";
 
 export class ClientFactory {
   private readonly clientController: ClientController;
@@ -22,6 +23,12 @@ export class ClientFactory {
   makeListAllClientsController = () => {
     this.clientController.registerEndpointListAllClients(
       new ListClientsUseCase(this.clientRepository)
+    );
+  };
+
+  makeGetClientByCpf = () => {
+    this.clientController.registerEndpointGetClientByCpf(
+      new GetClientByCpfUseCase(this.clientRepository)
     );
   };
 }
