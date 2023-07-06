@@ -1,14 +1,17 @@
 import { IClientRepository } from "@application/ports/IClientRepository";
 import { ClientEntity } from "@domain/entities/ClientEntity";
-import { CreateClientError, ListClientError } from "src/error";
 import { Either } from "src/shared/either";
+import { ListClientError } from "src/error";
+import { SaveClientError } from "./errors";
 
 export default class ClientDatabaseRepository implements IClientRepository {
-  async save(client: ClientEntity): Promise<Either<CreateClientError, ClientEntity>> {
+  async save(
+    client: ClientEntity
+  ): Promise<Either<SaveClientError, ClientEntity>> {
     throw new Error("Method not implemented.");
   }
 
-  async list(): Promise<Either<ListClientError,ClientEntity[]>> {
+  async list(): Promise<Either<ListClientError, ClientEntity[]>> {
     throw new Error("Method not implemented.");
   }
 

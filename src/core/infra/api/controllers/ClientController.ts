@@ -15,14 +15,14 @@ export class ClientController {
     this.httpServer.register(
       "get",
       "/client",
-      async function (params: any, body: any) {
+      async function (/* params: any, body: any */) {
         const response = await listClientsUseCase.execute();
         if (response.isLeft()) {
           return badRequest({ error: response.value.message });
         }
         const clientsDto = response.value.map((clientData) => ({
-          nome: clientData.name,
-          cpf: clientData.cpf,
+          cpf: clientData.getCpf(),
+          key: clientData.getKey(),
         }));
         return ok(clientsDto);
       }

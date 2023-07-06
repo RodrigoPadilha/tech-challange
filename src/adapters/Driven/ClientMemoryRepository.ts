@@ -1,7 +1,8 @@
 import { IClientRepository } from "@application/ports/IClientRepository";
 import { ClientEntity } from "@domain/entities/ClientEntity";
 import { Either, left, right } from "src/shared/either";
-import { CreateClientError, ListClientError } from "src/error";
+import { ListClientError } from "src/error";
+import { SaveClientError } from "./errors";
 
 export class ClientMemoryRepository implements IClientRepository {
   private clients: ClientEntity[];
@@ -12,13 +13,13 @@ export class ClientMemoryRepository implements IClientRepository {
 
   async save(
     client: ClientEntity
-  ): Promise<Either<CreateClientError, ClientEntity>> {
+  ): Promise<Either<SaveClientError, ClientEntity>> {
     try {
       this.clients.push(client);
       return right(client);
     } catch (error) {
       console.log("===> ERRR", error);
-      return left(new CreateClientError(error));
+      return left(new SaveClientError(error));
     }
   }
 
@@ -32,7 +33,7 @@ export class ClientMemoryRepository implements IClientRepository {
   }
 
   async get(cpf: any): Promise<ClientEntity> {
-    const client = this.clients.find((client) => client.cpf === cpf);
+    const client = this.clients.find((client) => client.getCpf() === cpf);
     return client;
   }
 }
