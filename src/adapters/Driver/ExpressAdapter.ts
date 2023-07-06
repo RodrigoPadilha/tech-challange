@@ -29,7 +29,11 @@ export class ExpressAdapter implements IHttpServer {
     callback: Function
   ): Promise<void> {
     this.app[method](url, async function (req: Request, res: Response) {
-      const output: HttpResponse = await callback(req.params, req.body);
+      const output: HttpResponse = await callback(
+        req.params,
+        req.body,
+        req.query
+      );
       res.status(output.statusCode).json(output.body);
     });
   }
