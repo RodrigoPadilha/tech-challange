@@ -3,6 +3,7 @@ import { ClientEntity } from "@domain/entities/ClientEntity";
 import { Either, left, right } from "src/shared/either";
 import { ListClientError } from "src/error";
 import { SaveClientError } from "./errors";
+import { Cpf } from "@domain/value-objects/Cpf";
 
 export class ClientMemoryRepository implements IClientRepository {
   private clients: ClientEntity[];
@@ -32,8 +33,10 @@ export class ClientMemoryRepository implements IClientRepository {
     }
   }
 
-  async get(cpf: any): Promise<ClientEntity> {
-    const client = this.clients.find((client) => client.getCpf() === cpf);
+  async getBy(cpf: Cpf): Promise<ClientEntity> {
+    const client = this.clients.find(
+      (client) => client.getCpf() === cpf.getValue()
+    );
     return client;
   }
 }

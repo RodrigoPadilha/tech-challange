@@ -1,9 +1,11 @@
 import { ClientEntity } from "@domain/entities/ClientEntity";
 import { Either } from "src/shared/either";
-import { CreateClientError, ListClientError } from "src/error";
+import { ListClientError } from "src/error";
+import { SaveClientError } from "@adapters/Driven/errors";
+import { Cpf } from "@domain/value-objects/Cpf";
 
 export interface IClientRepository {
-  save(client: ClientEntity): Promise<Either<CreateClientError, ClientEntity>>;
+  save(client: ClientEntity): Promise<Either<SaveClientError, ClientEntity>>;
   list(): Promise<Either<ListClientError, ClientEntity[]>>;
-  get(cpf: string): Promise<ClientEntity>;
+  getBy(cpf: Cpf): Promise<ClientEntity>;
 }

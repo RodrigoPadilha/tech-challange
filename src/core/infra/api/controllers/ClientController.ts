@@ -52,17 +52,30 @@ export class ClientController {
   registerEndpointGetClientByCpf(getClientByCpfUseCase: GetClientByCpfUseCase) {
     this.httpServer.register(
       "get",
-      "/client/:id",
+      "/client/:cpf",
       async function (params: any, body: any, query: any) {
-        const id = params.id;
-        console.log(params);
-        console.log(query);
-        return ok({
-          id: id,
-          nome: "Any Client",
-          cpf: "000000000" + id,
+        const response = await getClientByCpfUseCase.execute({
+          cpf: params.cpf,
         });
+        if (response.isLeft()) {
+          return badRequest({ error: response.value.message });
+        }
+        if (!response.value) {
+          return ok({ message: "Usuário não encontrado." });
+        }
+        const clientDto = {
+          key: response.value.getKey(),
+          cpf: response.value.getCpf(),
+          isAnonymous: response.value.getIsAnonymous(),
+        };
+        return ok(clientDto);
       }
     );
   }
 }
+
+/* 
+  const id = params.cpf;
+  console.log(params);
+  console.log(query); 
+*/
