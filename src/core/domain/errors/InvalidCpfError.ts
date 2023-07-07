@@ -1,6 +1,6 @@
 export class InvalidCpfError extends Error {
   constructor(cpf: string) {
-    super(`Invalid cpf: ${cpf}`);
+    super(`Cpf inválido: ${cpf}`);
     this.name = "InvalidCpfError";
   }
 }

@@ -7,7 +7,10 @@ import {
   badRequest,
   created,
   ok,
+  serverError,
 } from "src/core/util/http-helper";
+import { MissingParamError } from "../../errors/MissingParamError";
+import { validateProps } from "./validateProps";
 
 export class ClientController {
   constructor(readonly httpServer: IHttpServer) {}
@@ -32,19 +35,37 @@ export class ClientController {
       "post",
       "/client",
       async function (params: any, body: any): Promise<HttpResponse> {
-        const response = await createClientUseCase.execute(body);
-        if (response.isLeft()) {
-          return badRequest({ error: response.value.message });
+        try {
+          const missingProps = validateProps(["cpf", "name", "email"], body);
+          if (missingProps.length > 0) {
+            const missingParam = missingProps.join(" ");
+            return badRequest({
+              error: new MissingParamError(missingParam.trim()).message,
+            });
+          }
+
+          const { cpf, name, email } = body;
+          const response = await createClientUseCase.execute({
+            cpf,
+            name,
+            email,
+          });
+          if (response.isLeft()) {
+            return badRequest({ error: response.value.message });
+          }
+          const clientDto = {
+            key: response.value.getKey(),
+            cpf: response.value.getCpf(),
+            isAnonymous: response.value.getIsAnonymous(),
+          };
+
+          return created({
+            message: "Cliente criado com sucesso!",
+            client: clientDto,
+          });
+        } catch (error) {
+          return serverError(error);
         }
-        const clientDto = {
-          key: response.value.getKey(),
-          cpf: response.value.getCpf(),
-          isAnonymous: response.value.getIsAnonymous(),
-        };
-        return created({
-          message: "Cliente criado com sucesso!",
-          client: clientDto,
-        });
       }
     );
   }

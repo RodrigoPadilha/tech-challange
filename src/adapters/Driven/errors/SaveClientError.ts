@@ -1,6 +1,6 @@
 export class SaveClientError extends Error {
   constructor(data?: any) {
-    super(`Save client error. ${data}`);
+    super(`Erro ao salvar cliente. ${data}`);
     this.name = "SaveClientError";
   }
 }
