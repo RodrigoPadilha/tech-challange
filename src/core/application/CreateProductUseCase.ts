@@ -4,6 +4,7 @@ import { Either, left, right } from "src/shared/either";
 import { ProductEntity } from "@domain/entities/ProductEntity";
 import { InvalidCategoryError } from "@domain/errors";
 import { SaveProductError } from "@adapters/Driven/errors";
+import { Price } from "@domain/value-objects/Price";
 
 interface Input {
   description: string;
@@ -16,13 +17,17 @@ export class CreateProductUseCase {
   async execute(
     input: Input
   ): Promise<Either<InvalidCategoryError | SaveProductError, ProductEntity>> {
+    const priceOutput = Price.create(input.price);
+    if (priceOutput.isLeft()) {
+      return left(priceOutput.value);
+    }
     const categoryOutput = Category.create(input.category);
     if (categoryOutput.isLeft()) {
       return left(categoryOutput.value);
     }
     const category = categoryOutput.value as Category;
-    const productEntity = new ProductEntity(category);
-    // const price = input.price; //TODO ValueObject
+    const price = priceOutput.value as Price;
+    const productEntity = new ProductEntity(price, category);
     // const desciption = input.description;
     const saveEntityOutput = await this.repository.save(productEntity);
     if (saveEntityOutput.isLeft()) {

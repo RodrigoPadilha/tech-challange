@@ -13,6 +13,26 @@ import { MissingParamError } from "../../errors/MissingParamError";
 export class ProductController {
   constructor(private readonly httpServer: IHttpServer) {}
 
+  registerEndpointListAllProducts(listAllProductsUseCase: ListProductsUseCase) {
+    this.httpServer.register("get", "/product", async function () {
+      try {
+        const result = await listAllProductsUseCase.execute();
+        if (result.isLeft()) {
+          return badRequest({ error: result.value.message });
+        }
+        const productsDto = result.value.map((product) => ({
+          price: product.getPrice(),
+          priceFormated: product.getPriceFormated(),
+          category: product.getCategory(),
+        }));
+
+        return ok(productsDto);
+      } catch (error) {
+        return serverError(error);
+      }
+    });
+  }
+
   registerEndpointCreateProduct(createProductUseCase: CreateProductUseCase) {
     this.httpServer.register(
       "post",
@@ -50,16 +70,5 @@ export class ProductController {
         }
       }
     );
-  }
-
-  registerEndpointListAllProducts(listAllProductsUseCase: ListProductsUseCase) {
-    this.httpServer.register("get", "/product", async function () {
-      try {
-        listAllProductsUseCase.execute();
-        return ok([{ description: "", price: 9.9, category: "bebida" }]);
-      } catch (error) {
-        return serverError(error);
-      }
-    });
   }
 }
