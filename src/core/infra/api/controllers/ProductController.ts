@@ -21,6 +21,7 @@ export class ProductController {
           return badRequest({ error: result.value.message });
         }
         const productsDto = result.value.map((product) => ({
+          desciption: product.getDescription(),
           price: product.getPrice(),
           priceFormated: product.getPriceFormated(),
           category: product.getCategory(),

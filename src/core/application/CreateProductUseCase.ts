@@ -25,10 +25,10 @@ export class CreateProductUseCase {
     if (categoryOutput.isLeft()) {
       return left(categoryOutput.value);
     }
-    const category = categoryOutput.value as Category;
+    const desciption = input.description;
     const price = priceOutput.value as Price;
-    const productEntity = new ProductEntity(price, category);
-    // const desciption = input.description;
+    const category = categoryOutput.value as Category;
+    const productEntity = new ProductEntity(desciption, price, category);
     const saveEntityOutput = await this.repository.save(productEntity);
     if (saveEntityOutput.isLeft()) {
       return left(saveEntityOutput.value);
