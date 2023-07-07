@@ -7,6 +7,7 @@ import {
   SaveProductError,
 } from "@adapters/Driven/errors";
 import { Category } from "@domain/value-objects/Category";
+import { UpdateProductError } from "@adapters/Driven/errors/UpdateProductError";
 
 export interface IProductRepository {
   save(
@@ -17,4 +18,7 @@ export interface IProductRepository {
   remove(
     id: string
   ): Promise<Either<ProductNotFoundError | DeleteProductError, ProductEntity>>;
+  update(
+    newProduct: ProductEntity
+  ): Promise<Either<ProductNotFoundError | UpdateProductError, ProductEntity>>;
 }

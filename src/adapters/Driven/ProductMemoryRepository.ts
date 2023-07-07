@@ -9,6 +9,7 @@ import {
 } from "./errors";
 import { ProductEntity } from "@domain/entities/ProductEntity";
 import { Category } from "@domain/value-objects/Category";
+import { UpdateProductError } from "./errors/UpdateProductError";
 
 export class ProductMemoryRepository implements IProductRepository {
   private products: ProductEntity[];
@@ -59,6 +60,28 @@ export class ProductMemoryRepository implements IProductRepository {
       return right(productFound);
     } catch (error) {
       return left(new DeleteProductError());
+    }
+  }
+
+  async update(
+    newProduct: ProductEntity
+  ): Promise<Either<ProductNotFoundError | UpdateProductError, ProductEntity>> {
+    try {
+      const productExists = this.products.some(
+        (product) => product.id === newProduct.id
+      );
+      if (!productExists) {
+        return left(new ProductNotFoundError(newProduct.id));
+      }
+      const index = this.products.findIndex(
+        (productToUpdate) => productToUpdate.id === newProduct.id
+      );
+      if (index !== -1) {
+        this.products.splice(index, 1, newProduct);
+      }
+      return right(newProduct);
+    } catch (error) {
+      return left(new UpdateProductError(newProduct.id));
     }
   }
 }

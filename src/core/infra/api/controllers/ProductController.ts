@@ -10,6 +10,7 @@ import {
 import { validateProps } from "./validateProps";
 import { MissingParamError } from "../../errors/MissingParamError";
 import { DeleteProductUseCase } from "@application/DeleteProductUseCase";
+import { UpdateProductUseCase } from "@application/UpdateProductUseCase";
 
 export class ProductController {
   constructor(private readonly httpServer: IHttpServer) {}
@@ -91,6 +92,52 @@ export class ProductController {
           return ok({
             message: "Produto removido com sucesso.",
             product: `${result.value.id} - ${result.value.getDescription()}`,
+          });
+        } catch (error) {
+          return serverError(error);
+        }
+      }
+    );
+  }
+
+  registerEndpointUpdateProduct(updateProductUseCase: UpdateProductUseCase) {
+    this.httpServer.register(
+      "put",
+      "/product/:id",
+      async function (params: any, body: any) {
+        try {
+          const missingProps = validateProps(
+            ["description", "price", "category"],
+            body
+          );
+          if (missingProps.length > 0) {
+            const missingParam = missingProps.join(" ");
+            return badRequest({
+              error: new MissingParamError(missingParam.trim()).message,
+            });
+          }
+
+          const { price, description, category } = body;
+          const result = await updateProductUseCase.execute({
+            id: params.id,
+            price,
+            description,
+            category,
+          });
+
+          if (result.isLeft()) {
+            return badRequest({ error: result.value.message });
+          }
+          const productDto = {
+            id: result.value.id,
+            price: result.value.getPrice(),
+            priceFormated: result.value.getPriceFormated(),
+            description: result.value.getDescription(),
+            category: result.value.getCategory(),
+          };
+          return ok({
+            message: "Produto atualizado com sucesso.",
+            product: productDto,
           });
         } catch (error) {
           return serverError(error);

@@ -17,5 +17,6 @@ export default class Router {
     productFactory.makeListAllProductsController();
     productFactory.makeCreateProductController();
     productFactory.makeDeleteProductController();
+    productFactory.makeUpdateProductController();
   }
 }
