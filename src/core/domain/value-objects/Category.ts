@@ -1,6 +1,13 @@
 import { InvalidCategoryError } from "@domain/errors";
 import { Either, left, right } from "src/shared/either";
 
+enum CategoryType {
+  Lanche = "Lanche",
+  Acompanhamento = "Acompanhamento",
+  Bebida = "Bebida",
+  Sobremesa = "Sobremesa",
+}
+
 export class Category {
   private readonly value: string;
 
@@ -13,7 +20,7 @@ export class Category {
   }
 
   public static create(value: string): Either<InvalidCategoryError, Category> {
-    const validCategories = ["Lanche", "Acompanhamento", "Bebida", "Sobremesa"];
+    const validCategories: string[] = Object.values(CategoryType);
     if (!validCategories.includes(value)) {
       return left(new InvalidCategoryError(value));
     }
