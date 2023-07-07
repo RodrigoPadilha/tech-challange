@@ -6,11 +6,11 @@ import { InvalidCpfError } from "@domain/errors";
 import { SaveClientError } from "@adapters/Driven/errors";
 import { Email } from "@domain/value-objects/Email";
 
-type Input = {
+interface Input {
   cpf: string;
   name: string;
   email: string;
-};
+}
 
 export class CreateClientUseCase {
   constructor(readonly repository: IClientRepository) {}

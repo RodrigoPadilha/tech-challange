@@ -18,11 +18,11 @@ export class ClientController {
   registerEndpointListAllClients(listClientsUseCase: ListClientsUseCase) {
     this.httpServer.register("get", "/client", async function () {
       try {
-        const response = await listClientsUseCase.execute();
-        if (response.isLeft()) {
-          return badRequest({ error: response.value.message });
+        const result = await listClientsUseCase.execute();
+        if (result.isLeft()) {
+          return badRequest({ error: result.value.message });
         }
-        const clientsDto = response.value.map((clientData) => ({
+        const clientsDto = result.value.map((clientData) => ({
           cpf: clientData.getCpf(),
           key: clientData.getKey(),
           isAnonymous: clientData.getIsAnonymous(),
@@ -49,18 +49,18 @@ export class ClientController {
           }
 
           const { cpf, name, email } = body;
-          const response = await createClientUseCase.execute({
+          const result = await createClientUseCase.execute({
             cpf,
             name,
             email,
           });
-          if (response.isLeft()) {
-            return badRequest({ error: response.value.message });
+          if (result.isLeft()) {
+            return badRequest({ error: result.value.message });
           }
           const clientDto = {
-            key: response.value.getKey(),
-            cpf: response.value.getCpf(),
-            isAnonymous: response.value.getIsAnonymous(),
+            key: result.value.getKey(),
+            cpf: result.value.getCpf(),
+            isAnonymous: result.value.getIsAnonymous(),
           };
 
           return created({
@@ -80,19 +80,19 @@ export class ClientController {
       "/client/:cpf",
       async function (params: any, body: any, query: any) {
         try {
-          const response = await getClientByCpfUseCase.execute({
+          const result = await getClientByCpfUseCase.execute({
             cpf: params.cpf,
           });
-          if (response.isLeft()) {
-            return badRequest({ error: response.value.message });
+          if (result.isLeft()) {
+            return badRequest({ error: result.value.message });
           }
-          if (!response.value) {
+          if (!result.value) {
             return ok({ message: "Usuário não encontrado." });
           }
           const clientDto = {
-            key: response.value.getKey(),
-            cpf: response.value.getCpf(),
-            isAnonymous: response.value.getIsAnonymous(),
+            key: result.value.getKey(),
+            cpf: result.value.getCpf(),
+            isAnonymous: result.value.getIsAnonymous(),
           };
           return ok(clientDto);
         } catch (error) {
