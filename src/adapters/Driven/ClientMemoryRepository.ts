@@ -12,11 +12,18 @@ export class ClientMemoryRepository implements IClientRepository {
   }
 
   async save(
-    client: ClientEntity
+    newClient: ClientEntity
   ): Promise<Either<SaveClientError, ClientEntity>> {
     try {
-      this.clients.push(client);
-      return right(client);
+      const foundClient = this.clients.find(
+        (client) => client.getCpf() === newClient.getCpf()
+      );
+      if (!!foundClient) {
+        return right(foundClient);
+      }
+
+      this.clients.push(newClient);
+      return right(newClient);
     } catch (error) {
       console.log("===> ERRR", error);
       return left(new SaveClientError(error));
