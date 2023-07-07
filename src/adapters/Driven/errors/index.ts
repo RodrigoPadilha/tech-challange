@@ -1,5 +1,8 @@
+// Client Errors
 export * from "./ListClientError";
 export * from "./SaveClientError";
-
-export * from "./SaveProductError";
+// Product Errors
 export * from "./ListProductError";
+export * from "./SaveProductError";
+export * from "./DeleteProductError";
+export * from "./ProductNotFoundError";

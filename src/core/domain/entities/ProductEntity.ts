@@ -5,11 +5,18 @@ export class ProductEntity {
   private readonly desciption: string;
   private readonly category: Category;
   private readonly price: Price;
+  id: string | undefined;
 
-  constructor(desciption: string, price: Price, category: Category) {
-    this.desciption = desciption;
+  constructor(
+    description: string,
+    price: Price,
+    category: Category,
+    id?: string
+  ) {
+    this.desciption = description;
     this.category = category;
     this.price = price;
+    this.id = id;
   }
 
   getDescription() {

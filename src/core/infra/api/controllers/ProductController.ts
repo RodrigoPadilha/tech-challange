@@ -9,6 +9,7 @@ import {
 } from "src/core/util/http-helper";
 import { validateProps } from "./validateProps";
 import { MissingParamError } from "../../errors/MissingParamError";
+import { DeleteProductUseCase } from "@application/DeleteProductUseCase";
 
 export class ProductController {
   constructor(private readonly httpServer: IHttpServer) {}
@@ -21,6 +22,7 @@ export class ProductController {
           return badRequest({ error: result.value.message });
         }
         const productsDto = result.value.map((product) => ({
+          id: product.id,
           desciption: product.getDescription(),
           price: product.getPrice(),
           priceFormated: product.getPriceFormated(),
@@ -65,6 +67,30 @@ export class ProductController {
           return created({
             message: "Produto criado com sucesso!",
             product: productDto,
+          });
+        } catch (error) {
+          return serverError(error);
+        }
+      }
+    );
+  }
+
+  registerEndpointDeleteProduct(deleteProductUseCase: DeleteProductUseCase) {
+    this.httpServer.register(
+      "delete",
+      "/product/:id",
+      async function (params: any, body: any) {
+        try {
+          const result = await deleteProductUseCase.execute({
+            id: params.id,
+          });
+          if (result.isLeft()) {
+            return badRequest({ error: result.value.message });
+          }
+
+          return ok({
+            message: "Produto removido com sucesso.",
+            product: `${result.value.id} - ${result.value.getDescription()}`,
           });
         } catch (error) {
           return serverError(error);

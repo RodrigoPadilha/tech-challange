@@ -1,6 +1,12 @@
+import { v4 as uuidv4 } from "uuid";
 import { IProductRepository } from "@application/ports/IProductRepository";
 import { Either, left, right } from "src/shared/either";
-import { ListProductError, SaveProductError } from "./errors";
+import {
+  DeleteProductError,
+  ListProductError,
+  ProductNotFoundError,
+  SaveProductError,
+} from "./errors";
 import { ProductEntity } from "@domain/entities/ProductEntity";
 import { Category } from "@domain/value-objects/Category";
 
@@ -15,6 +21,7 @@ export class ProductMemoryRepository implements IProductRepository {
     product: ProductEntity
   ): Promise<Either<SaveProductError, ProductEntity>> {
     try {
+      product.id = uuidv4();
       this.products.push(product);
       return right(product);
     } catch (error) {
@@ -37,5 +44,21 @@ export class ProductMemoryRepository implements IProductRepository {
       (client) => client.getCategory() === category.getValue()
     );
     return product;
+  }
+
+  async remove(
+    id: string
+  ): Promise<Either<ProductNotFoundError | DeleteProductError, ProductEntity>> {
+    try {
+      const productFound = this.products.find((product) => product.id === id);
+      if (!productFound) {
+        return left(new ProductNotFoundError(id));
+      }
+      const newArray = this.products.filter((product) => product.id !== id);
+      this.products = newArray;
+      return right(productFound);
+    } catch (error) {
+      return left(new DeleteProductError());
+    }
   }
 }

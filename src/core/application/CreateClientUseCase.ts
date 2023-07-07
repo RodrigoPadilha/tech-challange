@@ -13,7 +13,7 @@ interface Input {
 }
 
 export class CreateClientUseCase {
-  constructor(readonly repository: IClientRepository) {}
+  constructor(private readonly repository: IClientRepository) {}
   async execute(
     input: Input
   ): Promise<Either<InvalidCpfError | SaveClientError, ClientEntity>> {

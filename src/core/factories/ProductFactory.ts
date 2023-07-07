@@ -3,6 +3,7 @@ import { ProductController } from "../infra/api/controllers/ProductController";
 import { ListProductsUseCase } from "@application/ListProductsUsewCase";
 import { ProductMemoryRepository } from "@adapters/Driven/ProductMemoryRepository";
 import { CreateProductUseCase } from "@application/CreateProductUseCase";
+import { DeleteProductUseCase } from "@application/DeleteProductUseCase";
 
 export class ProductFactory {
   private readonly productController: ProductController;
@@ -22,6 +23,12 @@ export class ProductFactory {
   makeCreateProductController = () => {
     this.productController.registerEndpointCreateProduct(
       new CreateProductUseCase(this.productRepository)
+    );
+  };
+
+  makeDeleteProductController = () => {
+    this.productController.registerEndpointDeleteProduct(
+      new DeleteProductUseCase(this.productRepository)
     );
   };
 }
