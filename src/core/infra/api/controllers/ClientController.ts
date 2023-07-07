@@ -17,16 +17,20 @@ export class ClientController {
 
   registerEndpointListAllClients(listClientsUseCase: ListClientsUseCase) {
     this.httpServer.register("get", "/client", async function () {
-      const response = await listClientsUseCase.execute();
-      if (response.isLeft()) {
-        return badRequest({ error: response.value.message });
+      try {
+        const response = await listClientsUseCase.execute();
+        if (response.isLeft()) {
+          return badRequest({ error: response.value.message });
+        }
+        const clientsDto = response.value.map((clientData) => ({
+          cpf: clientData.getCpf(),
+          key: clientData.getKey(),
+          isAnonymous: clientData.getIsAnonymous(),
+        }));
+        return ok(clientsDto);
+      } catch (error) {
+        return serverError(error);
       }
-      const clientsDto = response.value.map((clientData) => ({
-        cpf: clientData.getCpf(),
-        key: clientData.getKey(),
-        isAnonymous: clientData.getIsAnonymous(),
-      }));
-      return ok(clientsDto);
     });
   }
 
@@ -75,21 +79,25 @@ export class ClientController {
       "get",
       "/client/:cpf",
       async function (params: any, body: any, query: any) {
-        const response = await getClientByCpfUseCase.execute({
-          cpf: params.cpf,
-        });
-        if (response.isLeft()) {
-          return badRequest({ error: response.value.message });
+        try {
+          const response = await getClientByCpfUseCase.execute({
+            cpf: params.cpf,
+          });
+          if (response.isLeft()) {
+            return badRequest({ error: response.value.message });
+          }
+          if (!response.value) {
+            return ok({ message: "Usuário não encontrado." });
+          }
+          const clientDto = {
+            key: response.value.getKey(),
+            cpf: response.value.getCpf(),
+            isAnonymous: response.value.getIsAnonymous(),
+          };
+          return ok(clientDto);
+        } catch (error) {
+          return serverError(error);
         }
-        if (!response.value) {
-          return ok({ message: "Usuário não encontrado." });
-        }
-        const clientDto = {
-          key: response.value.getKey(),
-          cpf: response.value.getCpf(),
-          isAnonymous: response.value.getIsAnonymous(),
-        };
-        return ok(clientDto);
       }
     );
   }
