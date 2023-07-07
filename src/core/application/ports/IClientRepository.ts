@@ -1,7 +1,6 @@
 import { ClientEntity } from "@domain/entities/ClientEntity";
 import { Either } from "src/shared/either";
-import { ListClientError } from "src/error";
-import { SaveClientError } from "@adapters/Driven/errors";
+import { ListClientError, SaveClientError } from "@adapters/Driven/errors";
 import { Cpf } from "@domain/value-objects/Cpf";
 
 export interface IClientRepository {

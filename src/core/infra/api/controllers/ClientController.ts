@@ -13,7 +13,7 @@ import { MissingParamError } from "../../errors/MissingParamError";
 import { validateProps } from "./validateProps";
 
 export class ClientController {
-  constructor(readonly httpServer: IHttpServer) {}
+  constructor(private readonly httpServer: IHttpServer) {}
 
   registerEndpointListAllClients(listClientsUseCase: ListClientsUseCase) {
     this.httpServer.register("get", "/client", async function () {

@@ -1,8 +1,7 @@
 import { IClientRepository } from "@application/ports/IClientRepository";
 import { ClientEntity } from "@domain/entities/ClientEntity";
 import { Either, left, right } from "src/shared/either";
-import { ListClientError } from "src/error";
-import { SaveClientError } from "./errors";
+import { SaveClientError, ListClientError } from "./errors";
 import { Cpf } from "@domain/value-objects/Cpf";
 
 export class ClientMemoryRepository implements IClientRepository {
