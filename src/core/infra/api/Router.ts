@@ -21,5 +21,6 @@ export default class Router {
     productFactory.makeUpdateProductController();
 
     const orderFactory = new OrderFactory(this.httpServer);
+    orderFactory.makeListOrderController();
   }
 }
