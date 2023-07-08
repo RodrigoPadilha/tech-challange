@@ -1,7 +1,7 @@
 import { InvalidCategoryError } from "@domain/errors";
 import { Either, left, right } from "src/shared/either";
 
-enum CategoryType {
+export enum CategoryType {
   Lanche = "Lanche",
   Acompanhamento = "Acompanhamento",
   Bebida = "Bebida",

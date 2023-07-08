@@ -16,25 +16,31 @@ export class ProductController {
   constructor(private readonly httpServer: IHttpServer) {}
 
   registerEndpointListAllProducts(listAllProductsUseCase: ListProductsUseCase) {
-    this.httpServer.register("get", "/product", async function () {
-      try {
-        const result = await listAllProductsUseCase.execute();
-        if (result.isLeft()) {
-          return badRequest({ error: result.value.message });
-        }
-        const productsDto = result.value.map((product) => ({
-          id: product.id,
-          desciption: product.getDescription(),
-          price: product.getPrice(),
-          priceFormated: product.getPriceFormated(),
-          category: product.getCategory(),
-        }));
+    this.httpServer.register(
+      "get",
+      "/product",
+      async function (params: any, body: any, query: any) {
+        try {
+          const result = await listAllProductsUseCase.execute({
+            category: query.category,
+          });
+          if (result.isLeft()) {
+            return badRequest({ error: result.value.message });
+          }
+          const productsDto = result.value.map((product) => ({
+            id: product.id,
+            desciption: product.getDescription(),
+            price: product.getPrice(),
+            priceFormated: product.getPriceFormated(),
+            category: product.getCategory(),
+          }));
 
-        return ok(productsDto);
-      } catch (error) {
-        return serverError(error);
+          return ok(productsDto);
+        } catch (error) {
+          return serverError(error);
+        }
       }
-    });
+    );
   }
 
   registerEndpointCreateProduct(createProductUseCase: CreateProductUseCase) {

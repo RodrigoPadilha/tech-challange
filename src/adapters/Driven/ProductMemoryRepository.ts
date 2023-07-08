@@ -1,5 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
-import { IProductRepository } from "@application/ports/IProductRepository";
+import {
+  IProductRepository,
+  ProductFilter,
+} from "@application/ports/IProductRepository";
 import { Either, left, right } from "src/shared/either";
 import {
   DeleteProductError,
@@ -31,9 +34,24 @@ export class ProductMemoryRepository implements IProductRepository {
     }
   }
 
-  async list(): Promise<Either<ListProductError, ProductEntity[]>> {
+  async list(
+    filter?: ProductFilter
+  ): Promise<Either<ListProductError, ProductEntity[]>> {
     try {
-      return right(this.products);
+      if (!filter) {
+        return right(this.products);
+      }
+
+      const productsFiltered = this.products.filter((product) => {
+        if (
+          filter.category &&
+          product.getCategory().includes(filter.category.getValue())
+        ) {
+          return true;
+        }
+        return false;
+      });
+      return right(productsFiltered);
     } catch (error) {
       console.log("===> ERRR", error);
       return left(new ListProductError(error));
