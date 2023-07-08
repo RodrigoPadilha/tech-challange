@@ -1,0 +1,12 @@
+import { OrderStatusType } from "@domain/value-objects/OrderStatus";
+
+export class InvalidOrderStatusError extends Error {
+  constructor(orderStatus: string) {
+    super(
+      `Status '${orderStatus}' não é válido. Status válidos: ${Object.values(
+        OrderStatusType
+      ).join(", ")}`
+    );
+    this.name = "InvalidOrderStatusError";
+  }
+}

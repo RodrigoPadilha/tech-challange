@@ -1,6 +1,7 @@
 import IHttpServer from "@application/ports/IHttpServer";
 import { ClientFactory } from "../../factories/ClientFactory";
 import { ProductFactory } from "src/core/factories/ProductFactory";
+import { OrderFactory } from "src/core/factories/OrderFactory";
 
 export default class Router {
   constructor(readonly httpServer: IHttpServer) {}
@@ -18,5 +19,7 @@ export default class Router {
     productFactory.makeCreateProductController();
     productFactory.makeDeleteProductController();
     productFactory.makeUpdateProductController();
+
+    const orderFactory = new OrderFactory(this.httpServer);
   }
 }
