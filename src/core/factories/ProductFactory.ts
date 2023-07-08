@@ -15,8 +15,8 @@ export class ProductFactory {
     this.productRepository = new ProductMemoryRepository();
   }
 
-  makeListAllProductsController = () => {
-    this.productController.registerEndpointListAllProducts(
+  makeListProductsController = () => {
+    this.productController.registerEndpointListProducts(
       new ListProductsUseCase(this.productRepository)
     );
   };

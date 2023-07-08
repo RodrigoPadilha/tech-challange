@@ -14,7 +14,7 @@ export default class Router {
     clientFactory.makeGetClientByCpf();
 
     const productFactory = new ProductFactory(this.httpServer);
-    productFactory.makeListAllProductsController();
+    productFactory.makeListProductsController();
     productFactory.makeCreateProductController();
     productFactory.makeDeleteProductController();
     productFactory.makeUpdateProductController();

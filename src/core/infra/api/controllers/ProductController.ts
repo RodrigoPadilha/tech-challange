@@ -15,13 +15,13 @@ import { UpdateProductUseCase } from "@application/UpdateProductUseCase";
 export class ProductController {
   constructor(private readonly httpServer: IHttpServer) {}
 
-  registerEndpointListAllProducts(listAllProductsUseCase: ListProductsUseCase) {
+  registerEndpointListProducts(ListProductsUseCase: ListProductsUseCase) {
     this.httpServer.register(
       "get",
       "/product",
       async function (params: any, body: any, query: any) {
         try {
-          const result = await listAllProductsUseCase.execute({
+          const result = await ListProductsUseCase.execute({
             category: query.category,
           });
           if (result.isLeft()) {
