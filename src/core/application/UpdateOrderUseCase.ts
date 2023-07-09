@@ -1,16 +1,17 @@
-import { Either, left, right } from "src/shared/either";
-import { IOrderRepository } from "./ports/IOrderRepository";
 import { OrderEntity } from "@domain/entities/OrderEntity";
+import { IOrderRepository } from "./ports/IOrderRepository";
 import {
   ListOrderError,
   OrderDuplicateError,
   OrderNotFoundError,
   UpdateOrderError,
 } from "@adapters/Driven/errors";
+import { Either, left, right } from "src/shared/either";
 import { OrderStatus } from "@domain/value-objects/OrderStatus";
 
 interface Input {
   orderId: string;
+  newOrderStatus: string;
 }
 
 type TypeOrderErrors =
@@ -19,9 +20,15 @@ type TypeOrderErrors =
   | OrderNotFoundError
   | UpdateOrderError;
 
-export class CheckoutOrderUseCase {
+export class UpdateOrderUseCase {
   constructor(private readonly repository: IOrderRepository) {}
+
   async execute(input: Input): Promise<Either<TypeOrderErrors, OrderEntity>> {
+    const newOrderStatusOutput = OrderStatus.create(input.newOrderStatus);
+    if (newOrderStatusOutput.isLeft()) {
+      return left(newOrderStatusOutput.value);
+    }
+
     const listOrderOutput = await this.repository.list({ id: input.orderId });
     if (listOrderOutput.isLeft()) {
       return left(listOrderOutput.value);
@@ -32,11 +39,6 @@ export class CheckoutOrderUseCase {
       return left(new OrderDuplicateError(input.orderId));
     }
 
-    const newOrderStatusOutput = OrderStatus.create("Recebido");
-    if (newOrderStatusOutput.isLeft()) {
-      return left(newOrderStatusOutput.value);
-    }
-
     const currentOrderEntity = orderEntities[0];
     const newOrderEntity = new OrderEntity(
       newOrderStatusOutput.value,
@@ -45,10 +47,12 @@ export class CheckoutOrderUseCase {
       currentOrderEntity.getProducts(),
       currentOrderEntity.id
     );
+
     const updateOutput = await this.repository.update(newOrderEntity);
     if (updateOutput.isLeft()) {
       return left(updateOutput.value);
     }
+
     return right(newOrderEntity);
   }
 }

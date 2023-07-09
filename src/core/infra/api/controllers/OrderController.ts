@@ -5,6 +5,7 @@ import { validateProps } from "./validateProps";
 import { MissingParamError } from "../../errors/MissingParamError";
 import { CreateOrderUseCase } from "@application/CreateOrderUseCase";
 import { CheckoutOrderUseCase } from "@application/CheckoutOrderUseCase";
+import { UpdateOrderUseCase } from "@application/UpdateOrderUseCase";
 
 export class OrderController {
   constructor(private readonly httpServer: IHttpServer) {}
@@ -80,13 +81,45 @@ export class OrderController {
     );
   }
 
+  registerEndpointUpdateOrder(updateOrderUseCase: UpdateOrderUseCase) {
+    this.httpServer.register(
+      "put",
+      "/order/:id",
+      async function (params: any, body: any) {
+        try {
+          const missingProps = validateProps(["newOrderStatus"], body);
+          if (missingProps.length > 0) {
+            const missingParam = missingProps.join(" ");
+            return badRequest({
+              error: new MissingParamError(missingParam.trim()).message,
+            });
+          }
+
+          const result = await updateOrderUseCase.execute({
+            orderId: params.id,
+            newOrderStatus: body.newOrderStatus,
+          });
+
+          if (result.isLeft()) {
+            return badRequest({ error: result.value.message });
+          }
+          return ok({
+            orderId: result.value.id,
+            newStatus: result.value.getStatus().getValue(),
+          });
+        } catch (error) {
+          return serverError(error);
+        }
+      }
+    );
+  }
+
   registerEndpointCheckoutOrder(checkoutOrderUseCase: CheckoutOrderUseCase) {
     this.httpServer.register(
       "patch",
       "/order/checkout/:id",
       async function (params: any, body: any) {
         try {
-          console.log("===> Chegou id", params.id);
           const result = await checkoutOrderUseCase.execute({
             orderId: params.id,
           });

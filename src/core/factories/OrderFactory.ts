@@ -5,6 +5,7 @@ import { ListOrdersUseCase } from "@application/ListOrdersUseCase";
 import { CreateOrderUseCase } from "@application/CreateOrderUseCase";
 import { ProductMemoryRepository } from "@adapters/Driven/ProductMemoryRepository";
 import { CheckoutOrderUseCase } from "@application/CheckoutOrderUseCase";
+import { UpdateOrderUseCase } from "@application/UpdateOrderUseCase";
 
 export class OrderFactory {
   private readonly orderController: OrderController;
@@ -26,6 +27,12 @@ export class OrderFactory {
   makeCreateOrderController = () => {
     this.orderController.registerEndpointCreateOrder(
       new CreateOrderUseCase(this.orderRepository, this.productRepository)
+    );
+  };
+
+  makeUpdateOrderController = () => {
+    this.orderController.registerEndpointUpdateOrder(
+      new UpdateOrderUseCase(this.orderRepository)
     );
   };
 
