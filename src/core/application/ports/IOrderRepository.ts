@@ -7,10 +7,14 @@ import {
 } from "@adapters/Driven/errors";
 import { Either } from "src/shared/either";
 
+export interface OrderFilter {
+  id?: string;
+}
+
 export interface IOrderRepository {
   save(order: OrderEntity): Promise<Either<SaveOrderError, OrderEntity>>;
 
-  list(): Promise<Either<ListOrderError, OrderEntity[]>>;
+  list(filter?: OrderFilter): Promise<Either<ListOrderError, OrderEntity[]>>;
 
   update(
     newOrder: OrderEntity

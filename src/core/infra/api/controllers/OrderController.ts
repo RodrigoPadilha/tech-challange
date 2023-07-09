@@ -4,6 +4,7 @@ import { badRequest, ok, serverError } from "src/core/util/http-helper";
 import { validateProps } from "./validateProps";
 import { MissingParamError } from "../../errors/MissingParamError";
 import { CreateOrderUseCase } from "@application/CreateOrderUseCase";
+import { CheckoutOrderUseCase } from "@application/CheckoutOrderUseCase";
 
 export class OrderController {
   constructor(private readonly httpServer: IHttpServer) {}
@@ -72,6 +73,30 @@ export class OrderController {
             })),
           };
           return ok(orderDto);
+        } catch (error) {
+          return serverError(error);
+        }
+      }
+    );
+  }
+
+  registerEndpointCheckoutOrder(checkoutOrderUseCase: CheckoutOrderUseCase) {
+    this.httpServer.register(
+      "patch",
+      "/order/checkout/:id",
+      async function (params: any, body: any) {
+        try {
+          console.log("===> Chegou id", params.id);
+          const result = await checkoutOrderUseCase.execute({
+            orderId: params.id,
+          });
+          if (result.isLeft()) {
+            return badRequest({ error: result.value.message });
+          }
+          return ok({
+            orderId: result.value.id,
+            newStatus: result.value.getStatus().getValue(),
+          });
         } catch (error) {
           return serverError(error);
         }

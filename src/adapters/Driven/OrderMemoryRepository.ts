@@ -1,5 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
-import { IOrderRepository } from "@application/ports/IOrderRepository";
+import {
+  IOrderRepository,
+  OrderFilter,
+} from "@application/ports/IOrderRepository";
 import { OrderEntity } from "@domain/entities/OrderEntity";
 import { Either, left, right } from "src/shared/either";
 import {
@@ -27,9 +30,20 @@ export class OrderMemoryRepository implements IOrderRepository {
     }
   }
 
-  async list(): Promise<Either<ListOrderError, OrderEntity[]>> {
+  async list(
+    filter?: OrderFilter
+  ): Promise<Either<ListOrderError, OrderEntity[]>> {
     try {
-      return right(this.orders);
+      if (!filter) {
+        return right(this.orders);
+      }
+      const ordersFiltered = this.orders.filter((order) => {
+        if (filter.id && order.id === filter.id) {
+          return true;
+        }
+        return false;
+      });
+      return right(ordersFiltered);
     } catch (error) {
       console.log("===> ERRR", error);
       return left(new ListOrderError(error));

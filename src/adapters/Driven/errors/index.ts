@@ -11,3 +11,4 @@ export * from "./ListOrderError";
 export * from "./SaveOrderError";
 export * from "./UpdateOrderError";
 export * from "./OrderNotFoundError";
+export * from "./OrderCheckoutError";

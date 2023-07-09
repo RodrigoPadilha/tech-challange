@@ -13,12 +13,14 @@ export class OrderEntity {
     status: OrderStatus,
     clientKey: string,
     totalAmount: Price,
-    products: ProductEntity[]
+    products: ProductEntity[],
+    id?: string
   ) {
     this.status = status;
     this.clientKey = clientKey;
     this.totalAmount = totalAmount;
     this.products = products;
+    this.id = id;
   }
 
   getStatus() {
