@@ -31,7 +31,7 @@ export class ProductController {
             id: product.id,
             desciption: product.getDescription(),
             price: product.getPrice(),
-            priceFormated: product.getPriceFormated(),
+            priceFormatted: product.getPriceFormatted(),
             category: product.getCategory(),
           }));
 
@@ -137,7 +137,7 @@ export class ProductController {
           const productDto = {
             id: result.value.id,
             price: result.value.getPrice(),
-            priceFormated: result.value.getPriceFormated(),
+            priceFormatted: result.value.getPriceFormatted(),
             description: result.value.getDescription(),
             category: result.value.getCategory(),
           };

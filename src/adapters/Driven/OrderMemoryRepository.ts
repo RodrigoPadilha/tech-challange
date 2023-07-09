@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { IOrderRepository } from "@application/ports/IOrderRepository";
-import { OrderEntity } from "@domain/entities/Order";
+import { OrderEntity } from "@domain/entities/OrderEntity";
 import { Either, left, right } from "src/shared/either";
 import {
   SaveOrderError,

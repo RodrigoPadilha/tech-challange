@@ -14,8 +14,8 @@ export class ProductEntity {
     id?: string
   ) {
     this.desciption = description;
-    this.category = category;
     this.price = price;
+    this.category = category;
     this.id = id;
   }
 
@@ -27,7 +27,7 @@ export class ProductEntity {
     return this.price.getValue();
   }
 
-  getPriceFormated() {
+  getPriceFormatted() {
     return this.price.toString();
   }
 

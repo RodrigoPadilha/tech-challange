@@ -1,6 +1,9 @@
 import { ListOrdersUseCase } from "@application/ListOrdersUseCase";
 import IHttpServer from "@application/ports/IHttpServer";
 import { badRequest, ok, serverError } from "src/core/util/http-helper";
+import { validateProps } from "./validateProps";
+import { MissingParamError } from "../../errors/MissingParamError";
+import { CreateOrderUseCase } from "@application/CreateOrderUseCase";
 
 export class OrderController {
   constructor(private readonly httpServer: IHttpServer) {}
@@ -17,13 +20,58 @@ export class OrderController {
           }
           const ordersDto = result.value.map((order) => ({
             id: order.id,
-            status: order.getStatus(),
+            status: order.getStatus().getValue(),
             clientKey: order.getClientKey(),
-            amount: order.getAmount(),
-            amountFormated: order.getAmount(),
-            productList: order.getProductList().map((product) => product),
+            totalAmount: order.getTotalAmount().getValue(),
+            totalAmountFormatted: order.getTotalAmountFormatted(),
+            productList: order.getProducts().map((product) => ({
+              description: product.getDescription(),
+              category: product.getCategory(),
+              price: product.getPrice(),
+              priceFormatted: product.getPriceFormatted(),
+            })),
           }));
           return ok(ordersDto);
+        } catch (error) {
+          return serverError(error);
+        }
+      }
+    );
+  }
+
+  registerEndpointCreateOrder(createOrderUseCase: CreateOrderUseCase) {
+    this.httpServer.register(
+      "post",
+      "/order",
+      async function (params: any, body: any) {
+        try {
+          const missingProps = validateProps(["key", "products"], body);
+          if (missingProps.length > 0) {
+            const missingParam = missingProps.join(" ");
+            return badRequest({
+              error: new MissingParamError(missingParam.trim()).message,
+            });
+          }
+          const { key, products } = body;
+          const result = await createOrderUseCase.execute({ key, products });
+          if (result.isLeft()) {
+            return badRequest({ error: result.value.message });
+          }
+
+          const orderDto = {
+            id: result.value.id,
+            status: result.value.getStatus().getValue(),
+            clientKey: result.value.getClientKey(),
+            totalAmount: result.value.getTotalAmount().getValue(),
+            totalAmountFormatted: result.value.getTotalAmountFormatted(),
+            productList: result.value.getProducts().map((product) => ({
+              description: product.getDescription(),
+              category: product.getCategory(),
+              price: product.getPrice(),
+              priceFormatted: product.getPriceFormatted(),
+            })),
+          };
+          return ok(orderDto);
         } catch (error) {
           return serverError(error);
         }

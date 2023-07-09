@@ -1,7 +1,7 @@
 import { Either, left, right } from "src/shared/either";
 import { IOrderRepository } from "./ports/IOrderRepository";
 import { ListOrderError } from "@adapters/Driven/errors";
-import { OrderEntity } from "@domain/entities/Order";
+import { OrderEntity } from "@domain/entities/OrderEntity";
 
 export class ListOrdersUseCase {
   constructor(private readonly repository: IOrderRepository) {}

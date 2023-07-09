@@ -1,4 +1,4 @@
-import { OrderEntity } from "@domain/entities/Order";
+import { OrderEntity } from "@domain/entities/OrderEntity";
 import {
   ListOrderError,
   OrderNotFoundError,

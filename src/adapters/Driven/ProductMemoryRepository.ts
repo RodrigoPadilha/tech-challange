@@ -13,12 +13,32 @@ import {
 import { ProductEntity } from "@domain/entities/ProductEntity";
 import { Category } from "@domain/value-objects/Category";
 import { UpdateProductError } from "./errors/UpdateProductError";
+import { Price } from "@domain/value-objects/Price";
 
 export class ProductMemoryRepository implements IProductRepository {
   private products: ProductEntity[];
 
   constructor() {
-    this.products = [];
+    this.products = [
+      new ProductEntity(
+        "Xis Salada",
+        Price.create("18,50").value as Price,
+        Category.create("Lanche").value as Category,
+        "1"
+      ),
+      new ProductEntity(
+        "Xis Casa",
+        Price.create("25,90").value as Price,
+        Category.create("Lanche").value as Category,
+        "2"
+      ),
+      new ProductEntity(
+        "Coca-cola 2L",
+        Price.create("8,50").value as Price,
+        Category.create("Bebida").value as Category,
+        "3"
+      ),
+    ];
   }
 
   async save(
@@ -100,6 +120,27 @@ export class ProductMemoryRepository implements IProductRepository {
       return right(newProduct);
     } catch (error) {
       return left(new UpdateProductError(newProduct.id));
+    }
+  }
+
+  async getProductsByIds(
+    productIds: string[]
+  ): Promise<Either<ProductNotFoundError, ProductEntity[]>> {
+    try {
+      const productList: ProductEntity[] = [];
+      for (const productId of productIds) {
+        const productFound = this.products.find(
+          (product) => product.id === productId
+        );
+        if (!productFound) {
+          return left(new ProductNotFoundError(productId));
+        }
+        productList.push(productFound);
+      }
+
+      return right(productList);
+    } catch (error) {
+      return left(new ListProductError());
     }
   }
 }

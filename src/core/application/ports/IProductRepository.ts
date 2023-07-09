@@ -11,6 +11,7 @@ import { UpdateProductError } from "@adapters/Driven/errors/UpdateProductError";
 
 export interface ProductFilter {
   category?: Category;
+  id?: string;
 }
 
 export interface IProductRepository {
@@ -31,4 +32,8 @@ export interface IProductRepository {
   update(
     newProduct: ProductEntity
   ): Promise<Either<ProductNotFoundError | UpdateProductError, ProductEntity>>;
+
+  getProductsByIds(
+    productIds: string[]
+  ): Promise<Either<ProductNotFoundError, ProductEntity[]>>;
 }

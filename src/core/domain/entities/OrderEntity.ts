@@ -1,23 +1,24 @@
 import { OrderStatus } from "@domain/value-objects/OrderStatus";
 import { Price } from "@domain/value-objects/Price";
+import { ProductEntity } from "./ProductEntity";
 
 export class OrderEntity {
   private readonly status: OrderStatus;
   private readonly clientKey: string;
-  private readonly amount: Price;
-  private readonly productList: string[];
+  private readonly totalAmount: Price;
+  private readonly products: ProductEntity[];
   id: string | undefined;
 
   constructor(
     status: OrderStatus,
     clientKey: string,
-    amount: Price,
-    productList: string[]
+    totalAmount: Price,
+    products: ProductEntity[]
   ) {
     this.status = status;
     this.clientKey = clientKey;
-    this.amount = amount;
-    this.productList = productList;
+    this.totalAmount = totalAmount;
+    this.products = products;
   }
 
   getStatus() {
@@ -28,15 +29,15 @@ export class OrderEntity {
     return this.clientKey;
   }
 
-  getAmount() {
-    return this.amount;
+  getTotalAmount() {
+    return this.totalAmount;
   }
 
-  getAmountFormated() {
-    return this.amount.toString();
+  getTotalAmountFormatted() {
+    return this.totalAmount.toString();
   }
 
-  getProductList() {
-    return this.productList;
+  getProducts() {
+    return this.products;
   }
 }
