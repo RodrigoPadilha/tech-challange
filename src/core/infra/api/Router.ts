@@ -2,14 +2,18 @@ import IHttpServer from "@application/ports/IHttpServer";
 import { ClientFactory } from "../../factories/ClientFactory";
 import { ProductFactory } from "src/core/factories/ProductFactory";
 import { OrderFactory } from "src/core/factories/OrderFactory";
+import { IConnectionDatabase } from "@application/ports/IConnectionDatabase";
 
 export default class Router {
-  constructor(readonly httpServer: IHttpServer) {}
+  constructor(
+    readonly httpServer: IHttpServer,
+    readonly connection: IConnectionDatabase
+  ) {}
 
   start() {
     console.log("> [Router] starting...");
 
-    const clientFactory = new ClientFactory(this.httpServer);
+    const clientFactory = new ClientFactory(this.httpServer, this.connection);
     clientFactory.makeCreateClientController();
     clientFactory.makeListAllClientsController();
     clientFactory.makeGetClientByCpf();
