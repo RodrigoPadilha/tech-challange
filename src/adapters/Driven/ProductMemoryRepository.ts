@@ -78,13 +78,6 @@ export class ProductMemoryRepository implements IProductRepository {
     }
   }
 
-  async getBy(category: Category): Promise<ProductEntity> {
-    const product = this.products.find(
-      (client) => client.getCategory() === category.getValue()
-    );
-    return product;
-  }
-
   async remove(
     id: string
   ): Promise<Either<ProductNotFoundError | DeleteProductError, ProductEntity>> {

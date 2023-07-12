@@ -23,8 +23,6 @@ export interface IProductRepository {
     filter?: ProductFilter
   ): Promise<Either<ListProductError, ProductEntity[]>>;
 
-  getBy(category: Category): Promise<ProductEntity>;
-
   remove(
     id: string
   ): Promise<Either<ProductNotFoundError | DeleteProductError, ProductEntity>>;
