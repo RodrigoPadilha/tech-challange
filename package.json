@@ -9,7 +9,9 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --exit-child --ignore-watch node_modules --no-notify src/index.ts",
     "generate": "npx prisma generate",
     "migrate": "npx prisma migrate dev --name init",
-    "init": "npm run migrate && npm run generate && npm run dev"
+    "migrate:dev": "npx prisma migrate dev",
+    "migrate:deploy": "npx prisma migrate deploy",
+    "init": "npm run migrate:deploy && npm run generate && npm run dev"
   },
   "keywords": [],
   "author": "",

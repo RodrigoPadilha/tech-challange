@@ -8,14 +8,25 @@ datasource db {
 }
 
 model Client {
-  id           Int     @id @default(autoincrement())
-  key          String  @unique @default(uuid())
+  id           Int      @id @default(autoincrement())
+  key          String   @unique @default(uuid())
   cpf          String?
   name         String?
   email        String?
   is_anonymous Boolean
+  created_at   DateTime @default(now())
 
   @@map("clients")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  description String   @unique
+  price       Float
+  category    String
+  created_at  DateTime @default(now())
+
+  @@map("products")
 }
 
 // model Category {
