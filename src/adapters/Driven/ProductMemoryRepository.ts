@@ -42,12 +42,12 @@ export class ProductMemoryRepository implements IProductRepository {
   }
 
   async save(
-    product: ProductEntity
+    newProduct: ProductEntity
   ): Promise<Either<SaveProductError, ProductEntity>> {
     try {
-      product.id = uuidv4();
-      this.products.push(product);
-      return right(product);
+      newProduct.id = uuidv4();
+      this.products.push(newProduct);
+      return right(newProduct);
     } catch (error) {
       console.log("===> ERRR", error);
       return left(new SaveProductError(error));

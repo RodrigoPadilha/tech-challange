@@ -16,7 +16,7 @@ export interface ProductFilter {
 
 export interface IProductRepository {
   save(
-    product: ProductEntity
+    newProduct: ProductEntity
   ): Promise<Either<SaveProductError, ProductEntity>>;
 
   list(
