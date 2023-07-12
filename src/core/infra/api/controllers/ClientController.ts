@@ -16,22 +16,27 @@ export class ClientController {
   constructor(private readonly httpServer: IHttpServer) {}
 
   registerEndpointListAllClients(listClientsUseCase: ListClientsUseCase) {
-    this.httpServer.register("get", "/client", async function () {
-      try {
-        const result = await listClientsUseCase.execute();
-        if (result.isLeft()) {
-          return badRequest({ error: result.value.message });
+    this.httpServer.register(
+      "get",
+      "/client",
+      async function (params: any, body: any) {
+        try {
+          const result = await listClientsUseCase.execute();
+          if (result.isLeft()) {
+            return badRequest({ error: result.value.message });
+          }
+          const clientsDto = result.value.map((clientData) => ({
+            cpf: clientData.getCpf(),
+            key: clientData.getKey(),
+            isAnonymous: clientData.getIsAnonymous(),
+          }));
+          return ok(clientsDto);
+        } catch (error) {
+          console.log("===> ERRRO: ", error);
+          return serverError(error);
         }
-        const clientsDto = result.value.map((clientData) => ({
-          cpf: clientData.getCpf(),
-          key: clientData.getKey(),
-          isAnonymous: clientData.getIsAnonymous(),
-        }));
-        return ok(clientsDto);
-      } catch (error) {
-        return serverError(error);
       }
-    });
+    );
   }
 
   registerEndpointCreateClient(createClientUseCase: CreateClientUseCase) {
@@ -68,6 +73,7 @@ export class ClientController {
             client: clientDto,
           });
         } catch (error) {
+          console.log("===> ERRRO: ", error);
           return serverError(error);
         }
       }

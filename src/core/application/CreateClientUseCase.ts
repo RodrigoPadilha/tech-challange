@@ -33,6 +33,6 @@ export class CreateClientUseCase {
     if (saveEntityOutput.isLeft()) {
       return left(saveEntityOutput.value);
     }
-    return right(clientEntity);
+    return right(saveEntityOutput.value);
   }
 }
