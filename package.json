@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "node dist/index.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --exit-child --ignore-watch node_modules --no-notify src/index.ts",
     "generate": "npx prisma generate",
     "migrate": "npx prisma migrate dev --name init",
     "init": "npm run migrate && npm run generate && npm run dev"
