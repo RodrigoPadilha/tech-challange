@@ -23,10 +23,16 @@ model Product {
   id          String   @id @default(uuid())
   description String   @unique
   price       Float
-  category    String
+  category    Category
   created_at  DateTime @default(now())
 
   @@map("products")
+}
+
+enum Category {
+  Lanche
+  Bebida
+  Sobremesa
 }
 
 // model Category {
