@@ -1,0 +1,111 @@
+# API Cria ordem
+    /order POST
+        * receber dados do Cliente - cpf e key
+        * lista de produtos array Products[]
+
+        criar Order com status Aguardando pagamento e com valor total
+
+        retorna mensagem "Pedido criado com sucesso" 
+
+# API Fake checkout
+    /order/checkout
+        * id da  ordem
+        
+        Update o status da Ordem de "Aguardando Pagamento" para 
+        "Recebido"
+
+        retorna a mensagem: Pagamento efetuado com sucesso 
+
+# Atualizar Ordem
+    /order PATCH
+        * id da order
+        * status
+
+        Update o status da Ordem para o status recebido no body(se existir)
+
+        Recebido, Em preparação, Pronto, Finalizado
+
+# Listar Ordens
+    /order GET
+        * 
+
+        Busca todas as Ordens
+
+        retorna lista de Order[]
+
+
+OrderEntity
+    id
+    status
+    client_id
+    valor_total
+    produtos (ids)
+    
+
+npm install prisma --save-dev
+npm install @prisma/client
+
+
+# Cria arquivo schema.prisma
+  npx prisma init
+
+# 
+  npx prisma migrate dev --name init
+
+# reads your Prisma schema and generates your Prisma Client library
+  npx prisma generate
+
+
+
+prisma:
+    image: prismagraphql/prisma:latest
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 4466:4466
+    environment:
+      PRISMA_DATABASE_URL: 
+      postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}
+      postgres://your_username:your_password@db:5432/your_database
+    volumes:
+      - ./prisma:/app
+
+
+
+
+
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id           Int     @id @default(autoincrement())
+  key          String  @unique @default(uuid())
+  cpf          String?
+  name         String?
+  email        String?
+  is_anonymous Boolean
+
+  @@map("clients")
+}
+
+// model Category {
+//   id    Int    @id @default(autoincrement())
+//   name  String
+//   posts Post[]
+// }
+
+
+
+    

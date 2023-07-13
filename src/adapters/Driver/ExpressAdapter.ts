@@ -2,6 +2,8 @@ import { Server } from "http";
 import express, { Application, Request, Response } from "express";
 import IHttpServer from "@application/ports/IHttpServer";
 import { HttpResponse } from "src/core/util/http-helper";
+import swaggerUi from "swagger-ui-express";
+import * as swaggerDocument from "src/core/infra/docs/swagger.json";
 
 export class ExpressAdapter implements IHttpServer {
   private app: Application;
@@ -11,6 +13,7 @@ export class ExpressAdapter implements IHttpServer {
     this.app = express();
     this.setupMiddlewares();
     this.setupHealthCheck();
+    this.setupDocs();
   }
 
   private setupMiddlewares() {
@@ -21,6 +24,10 @@ export class ExpressAdapter implements IHttpServer {
     this.app.get("/", (req, resp) => {
       resp.send(`Hello World ${process.env.DB_HOST}: ${process.env.DB_PORT}`);
     });
+  }
+
+  private setupDocs(): void {
+    this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
 
   async register(
