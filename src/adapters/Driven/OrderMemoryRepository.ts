@@ -19,11 +19,13 @@ export class OrderMemoryRepository implements IOrderRepository {
     this.orders = [];
   }
 
-  async save(order: OrderEntity): Promise<Either<SaveOrderError, OrderEntity>> {
+  async save(
+    newOrder: OrderEntity
+  ): Promise<Either<SaveOrderError, OrderEntity>> {
     try {
-      order.id = uuidv4();
-      this.orders.push(order);
-      return right(order);
+      newOrder.id = uuidv4();
+      this.orders.push(newOrder);
+      return right(newOrder);
     } catch (error) {
       console.log("===> ERRR", error);
       return left(new SaveOrderError(error));

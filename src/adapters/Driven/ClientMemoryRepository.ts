@@ -1,7 +1,12 @@
 import { IClientRepository } from "@application/ports/IClientRepository";
 import { ClientEntity } from "@domain/entities/ClientEntity";
 import { Either, left, right } from "src/shared/either";
-import { SaveClientError, ListClientError } from "./errors";
+import {
+  SaveClientError,
+  ListClientError,
+  GetClientError,
+  ClientNotFoundError,
+} from "./errors";
 import { Cpf } from "@domain/value-objects/Cpf";
 
 export class ClientMemoryRepository implements IClientRepository {
@@ -39,10 +44,22 @@ export class ClientMemoryRepository implements IClientRepository {
     }
   }
 
-  async getBy(cpf: Cpf): Promise<ClientEntity> {
-    const client = this.clients.find(
-      (client) => client.getCpf() === cpf.getValue()
-    );
-    return client;
+  async getBy(
+    cpf: Cpf
+  ): Promise<Either<GetClientError | ClientNotFoundError, ClientEntity>> {
+    try {
+      console.log(cpf.getValue());
+      console.log(cpf.getValue());
+      console.log(cpf.getValue());
+      const client = this.clients.find(
+        (client) => client.getCpf() === cpf.getValue()
+      );
+      if (!client) {
+        return left(new ClientNotFoundError(cpf.getValue()));
+      }
+      return right(client);
+    } catch (error) {
+      return left(new GetClientError(cpf.getValue()));
+    }
   }
 }

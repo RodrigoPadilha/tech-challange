@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id           Int      @id @default(autoincrement())
+  key          String   @unique @default(uuid())
+  cpf          String?
+  name         String?
+  email        String?
+  is_anonymous Boolean
+  created_at   DateTime @default(now())
+  Order        Order[]
+
+  @@map("clients")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  description String
+  price       Float
+  category    Category
+  created_at  DateTime @default(now())
+
+  order_id String?
+  Order    Order?  @relation(fields: [order_id], references: [id])
+
+  @@map("products")
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  total_amount Float
+  status       OrderStatus
+  created_at   DateTime    @default(now())
+  products     Product[]
+
+  client_id Int
+  client    Client @relation(fields: [client_id], references: [id])
+
+  @@map("orders")
+}
+
+enum Category {
+  Lanche
+  Bebida
+  Sobremesa
+}
+
+enum OrderStatus {
+  Aguardando_pagamento
+  Recebido
+  Em_preparacao
+  Pronto
+  Finalizado
+}

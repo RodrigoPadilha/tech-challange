@@ -9,12 +9,12 @@ export class ClientEntity {
   private readonly email: Email;
   private readonly isAnonymous: boolean;
 
-  constructor(cpf: Cpf, name: string, email: Email) {
-    this.key = uuidv4();
+  constructor(cpf: Cpf, name: string, email: Email, key?: string) {
     this.cpf = cpf;
     this.name = name;
     this.email = email;
     this.isAnonymous = cpf.getValue().length === 0;
+    this.key = key ? key : uuidv4();
   }
 
   getKey() {

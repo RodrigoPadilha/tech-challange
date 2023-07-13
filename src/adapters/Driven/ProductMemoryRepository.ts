@@ -42,12 +42,12 @@ export class ProductMemoryRepository implements IProductRepository {
   }
 
   async save(
-    product: ProductEntity
+    newProduct: ProductEntity
   ): Promise<Either<SaveProductError, ProductEntity>> {
     try {
-      product.id = uuidv4();
-      this.products.push(product);
-      return right(product);
+      newProduct.id = uuidv4();
+      this.products.push(newProduct);
+      return right(newProduct);
     } catch (error) {
       console.log("===> ERRR", error);
       return left(new SaveProductError(error));
@@ -76,13 +76,6 @@ export class ProductMemoryRepository implements IProductRepository {
       console.log("===> ERRR", error);
       return left(new ListProductError(error));
     }
-  }
-
-  async getBy(category: Category): Promise<ProductEntity> {
-    const product = this.products.find(
-      (client) => client.getCategory() === category.getValue()
-    );
-    return product;
   }
 
   async remove(

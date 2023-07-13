@@ -12,7 +12,7 @@ export interface OrderFilter {
 }
 
 export interface IOrderRepository {
-  save(order: OrderEntity): Promise<Either<SaveOrderError, OrderEntity>>;
+  save(newOrder: OrderEntity): Promise<Either<SaveOrderError, OrderEntity>>;
 
   list(filter?: OrderFilter): Promise<Either<ListOrderError, OrderEntity[]>>;
 

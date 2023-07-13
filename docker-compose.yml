@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 services:
   backend:
     build:
@@ -10,7 +10,7 @@ services:
       - '3000:3000'
     volumes:
       - .:/app
-    command: npm run dev
+    command: npm run init
     environment:
         - SERVER_PORT=${SERVER_PORT}
         - ENVIRONMENT=${NODE_ENV} # production | development
@@ -19,20 +19,50 @@ services:
     networks:
       - tech_network
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
   db:
     build:
       context: .
       dockerfile: docker/Dockerfile.postgres
     image: tech_fase_1_db
     container_name: Tech_1_db
+    environment:
+        - POSTGRES_USER=${DB_USER}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=${DB_NAME}
     ports:
       - '5432:5432'
     volumes:
       - ./db:/var/lib/postgresql/data
     networks:
       - tech_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      timeout: 20s
+      retries: 10
 
 networks:
   tech_network:
     driver: bridge
+
+    #  db:
+    #    image: postgres
+    #    container_name: Tech_1_db
+    #    restart: always
+    #    ports:
+    #      - '5432:5432'
+    #    environment:
+    #      POSTGRES_USER: ${DB_USER}
+    #      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    #      POSTGRES_DB: ${DB_NAME}
+    #      DATABASE_URL: ${DATABASE_URL}
+    #    volumes:
+    #      - ./db:/var/lib/postgresql/data
+    #    networks:
+    #      - tech_network
+    #    healthcheck:
+    #      test: [ "CMD-SHELL", "pg_isready -d $${DB_NAME} -U $${DB_USER}"]
+    #      timeout: 20s
+    #      retries: 10

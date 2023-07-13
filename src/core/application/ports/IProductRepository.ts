@@ -16,14 +16,12 @@ export interface ProductFilter {
 
 export interface IProductRepository {
   save(
-    product: ProductEntity
+    newProduct: ProductEntity
   ): Promise<Either<SaveProductError, ProductEntity>>;
 
   list(
     filter?: ProductFilter
   ): Promise<Either<ListProductError, ProductEntity[]>>;
-
-  getBy(category: Category): Promise<ProductEntity>;
 
   remove(
     id: string
