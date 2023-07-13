@@ -24,7 +24,7 @@ export default class Router {
     productFactory.makeDeleteProductController();
     productFactory.makeUpdateProductController();
 
-    const orderFactory = new OrderFactory(this.httpServer);
+    const orderFactory = new OrderFactory(this.httpServer, this.connection);
     orderFactory.makeListOrderController();
     orderFactory.makeCreateOrderController();
     orderFactory.makeUpdateOrderController();
