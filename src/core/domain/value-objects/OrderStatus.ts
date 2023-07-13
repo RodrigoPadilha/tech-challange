@@ -2,9 +2,9 @@ import { InvalidOrderStatusError } from "@domain/errors";
 import { Either, left, right } from "src/shared/either";
 
 export enum OrderStatusType {
-  Aguardando_pagamento = "Aguardando pagamento",
+  Aguardando_pagamento = "Aguardando_pagamento",
   Recebido = "Recebido",
-  Em_preparação = "Em preparação",
+  Em_preparacao = "Em_preparacao",
   Pronto = "Pronto",
   Finalizado = "Finalizado",
 }

@@ -104,7 +104,7 @@ export class ProductDatabaseRepository implements IProductRepository {
       if (!productFound) {
         return left(new ProductNotFoundError(newProduct.id));
       }
-      const result = await this.prisma.product.update({
+      await this.prisma.product.update({
         data: {
           description: newProduct.getDescription(),
           price: newProduct.getPrice(),

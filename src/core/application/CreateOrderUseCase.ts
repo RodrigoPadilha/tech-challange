@@ -19,7 +19,7 @@ export class CreateOrderUseCase {
   ) {}
 
   async execute(input: Input): Promise<Either<SaveOrderError, OrderEntity>> {
-    const orderStatusOutput = OrderStatus.create("Aguardando pagamento");
+    const orderStatusOutput = OrderStatus.create("Aguardando_pagamento");
     if (orderStatusOutput.isLeft()) {
       return left(orderStatusOutput.value);
     }
