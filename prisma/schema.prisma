@@ -15,18 +15,35 @@ model Client {
   email        String?
   is_anonymous Boolean
   created_at   DateTime @default(now())
+  Order        Order[]
 
   @@map("clients")
 }
 
 model Product {
   id          String   @id @default(uuid())
-  description String   @unique
+  description String
   price       Float
   category    Category
   created_at  DateTime @default(now())
 
+  order_id String?
+  Order    Order?  @relation(fields: [order_id], references: [id])
+
   @@map("products")
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  total_amount Float
+  status       OrderStatus
+  created_at   DateTime    @default(now())
+  products     Product[]
+
+  client_id Int
+  client    Client @relation(fields: [client_id], references: [id])
+
+  @@map("orders")
 }
 
 enum Category {
@@ -35,8 +52,10 @@ enum Category {
   Sobremesa
 }
 
-// model Category {
-//   id    Int    @id @default(autoincrement())
-//   name  String
-//   posts Post[]
-// }
+enum OrderStatus {
+  Aguardando_pagamento
+  Recebido
+  Em_preparacao
+  Pronto
+  Finalizado
+}
