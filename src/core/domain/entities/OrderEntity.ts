@@ -2,18 +2,20 @@ import { OrderStatus } from "@domain/value-objects/OrderStatus";
 import { Price } from "@domain/value-objects/Price";
 import { ProductEntity } from "./ProductEntity";
 
+export type ProductOrder = { product: ProductEntity; quantity: number };
+
 export class OrderEntity {
   private readonly status: OrderStatus;
   private readonly clientKey: string;
   private readonly totalAmount: Price;
-  private readonly products: ProductEntity[];
+  private readonly products: ProductOrder[];
   id: string | undefined;
 
   constructor(
     status: OrderStatus,
     clientKey: string,
     totalAmount: Price,
-    products: ProductEntity[],
+    products: ProductOrder[],
     id?: string
   ) {
     this.status = status;

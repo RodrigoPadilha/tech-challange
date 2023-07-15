@@ -1,6 +1,6 @@
 import { Either, left, right } from "src/shared/either";
 import { IOrderRepository } from "./ports/IOrderRepository";
-import { OrderEntity } from "@domain/entities/OrderEntity";
+import { OrderEntity, ProductOrder } from "@domain/entities/OrderEntity";
 import { SaveOrderError } from "@adapters/Driven/errors";
 import { OrderStatus } from "@domain/value-objects/OrderStatus";
 import { IProductRepository } from "./ports/IProductRepository";
@@ -29,8 +29,19 @@ export class CreateOrderUseCase {
     );
     const productsEntities = productsOutput.value as ProductEntity[];
 
-    const totalAmount = productsEntities.reduce(
-      (total, product) => total + product.getPrice(),
+    const productOrdersMap = new Map<string, ProductOrder>();
+    input.products.forEach((id) => {
+      const matchingItems = productsEntities.find((item) => item.id === id);
+      if (productOrdersMap.has(id)) {
+        const productOrder = productOrdersMap.get(id);
+        productOrder.quantity += 1;
+      } else {
+        productOrdersMap.set(id, { product: matchingItems, quantity: 1 });
+      }
+    });
+    const productOrders = Array.from(productOrdersMap.values());
+    const totalAmount = productOrders.reduce(
+      (total, product) => total + product.product.getPrice() * product.quantity,
       0
     );
     const totalPriceOutput = Price.create(
@@ -51,7 +62,7 @@ export class CreateOrderUseCase {
       orderStatus,
       clientkey,
       totalPrice,
-      productsEntities
+      productOrders
     );
     const orderSaveOutput = await this.orderRepository.save(order);
     if (orderSaveOutput.isLeft()) {

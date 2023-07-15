@@ -48,9 +48,10 @@ export class OrderDatabaseRepository implements IOrderRepository {
           total_amount: newOrder.getTotalAmount().getValue(),
           products: {
             create: newOrder.getProducts().map((product) => ({
-              category: CategoryPrisma[product.getCategory()] as CategoryPrisma,
-              description: product.getDescription(),
-              price: product.getPrice(),
+              quantity: product.quantity,
+              product: {
+                connect: { id: product.product.id },
+              },
             })),
           },
         },
@@ -77,10 +78,15 @@ export class OrderDatabaseRepository implements IOrderRepository {
         include: {
           products: {
             select: {
-              id: true,
-              description: true,
-              category: true,
-              price: true,
+              product: {
+                select: {
+                  id: true,
+                  description: true,
+                  category: true,
+                  price: true,
+                },
+              },
+              quantity: true,
             },
           },
           client: { select: { key: true } },
@@ -89,23 +95,23 @@ export class OrderDatabaseRepository implements IOrderRepository {
 
       const ordersEntities = ordersData.map((order) => {
         //MAP PRODUCT
-        const products = order.products.map((product) => {
+        const productOrders = order.products.map((product) => {
           const priceOutput = Price.create(
             new Intl.NumberFormat("pt-BR", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
-            }).format(product.price)
+            }).format(product.product.price)
           );
-          const categoryOutput = Category.create(product.category);
+          const categoryOutput = Category.create(product.product.category);
           const price = priceOutput.value as Price;
           const category = categoryOutput.value as Category;
           const productEntity = new ProductEntity(
-            product.description,
+            product.product.description,
             price,
             category,
-            product.id
+            product.product.id
           );
-          return productEntity;
+          return { product: productEntity, quantity: product.quantity };
         });
 
         //MAP ORDER
@@ -122,7 +128,7 @@ export class OrderDatabaseRepository implements IOrderRepository {
           orderStatus,
           order.client.key,
           totalAmount,
-          products,
+          productOrders,
           order.id
         );
 
@@ -156,22 +162,19 @@ export class OrderDatabaseRepository implements IOrderRepository {
           total_amount: newOrder.getTotalAmount().getValue(),
           products: {
             upsert: newOrder.getProducts().map((product) => ({
+              where: {
+                order_id_product_id: {
+                  order_id: newOrder.id,
+                  product_id: product.product.id,
+                },
+              },
               create: {
-                id: product.id,
-                description: product.getDescription(),
-                category: CategoryPrisma[
-                  product.getCategory()
-                ] as CategoryPrisma,
-                price: product.getPrice(),
+                product: {
+                  connect: { id: product.product.id },
+                },
+                quantity: product.quantity,
               },
-              update: {
-                description: product.getDescription(),
-                category: CategoryPrisma[
-                  product.getCategory()
-                ] as CategoryPrisma,
-                price: product.getPrice(),
-              },
-              where: { id: product.id },
+              update: {},
             })),
           },
         },

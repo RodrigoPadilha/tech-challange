@@ -27,10 +27,11 @@ export class OrderController {
             totalAmount: order.getTotalAmount().getValue(),
             totalAmountFormatted: order.getTotalAmountFormatted(),
             productList: order.getProducts().map((product) => ({
-              description: product.getDescription(),
-              category: product.getCategory(),
-              price: product.getPrice(),
-              priceFormatted: product.getPriceFormatted(),
+              description: product.product.getDescription(),
+              category: product.product.getCategory(),
+              price: product.product.getPrice(),
+              priceFormatted: product.product.getPriceFormatted(),
+              quantity: product.quantity,
             })),
           }));
           return ok(ordersDto);
@@ -67,10 +68,11 @@ export class OrderController {
             totalAmount: result.value.getTotalAmount().getValue(),
             totalAmountFormatted: result.value.getTotalAmountFormatted(),
             productList: result.value.getProducts().map((product) => ({
-              description: product.getDescription(),
-              category: product.getCategory(),
-              price: product.getPrice(),
-              priceFormatted: product.getPriceFormatted(),
+              description: product.product.getDescription(),
+              category: product.product.getCategory(),
+              price: product.product.getPrice(),
+              priceFormatted: product.product.getPriceFormatted(),
+              quantity: product.quantity,
             })),
           };
           return ok(orderDto);
