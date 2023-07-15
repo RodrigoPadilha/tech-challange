@@ -22,28 +22,38 @@ model Client {
 
 model Product {
   id          String   @id @default(uuid())
-  description String
+  description String   @unique
   price       Float
   category    Category
   created_at  DateTime @default(now())
 
-  order_id String?
-  Order    Order?  @relation(fields: [order_id], references: [id])
+  orders ProductOnOrder[]
 
   @@map("products")
 }
 
 model Order {
-  id           String      @id @default(uuid())
+  id           String           @id @default(uuid())
   total_amount Float
   status       OrderStatus
-  created_at   DateTime    @default(now())
-  products     Product[]
+  created_at   DateTime         @default(now())
+  products     ProductOnOrder[]
 
   client_id Int
   client    Client @relation(fields: [client_id], references: [id])
 
   @@map("orders")
+}
+
+model ProductOnOrder {
+  quantity   Int
+  order_id   String
+  order      Order   @relation(fields: [order_id], references: [id])
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id])
+
+  @@id([order_id, product_id])
+  @@map("product_on_order")
 }
 
 enum Category {
