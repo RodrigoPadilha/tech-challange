@@ -54,7 +54,7 @@ https://drive.google.com/file/d/1RxcRPGs7n-aEH1yHdXKwX02eWdRGwW43/view?usp=shari
 
 Para executar o projeto localmente, siga as etapas abaixo:
 
-1. Certifique-se de ter o Node.js e o Docker instalados em sua máquina.
+1. Certifique-se de ter o Node.js (min version 14.17) e o Docker instalados em sua máquina.
 2. Clone este repositório.
 3. Acesse o diretório do projeto via terminal.
 4. Execute o comando `npm install` para instalar as dependências.
