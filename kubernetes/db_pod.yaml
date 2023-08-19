@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: tech-db-pod
+  labels:
+    app: tech-db-pod
 spec:
   containers:
     - name: tech-db-container

@@ -2,9 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tech-db-service
+  labels:
+    name: tech-db-service
 spec:
+  type: ClusterIP
   selector:
-    app: tech-db
+    app: tech-db-pod
   ports:
-    - protocol: TCP
-      port: 5432
+    - port: 5432 # Vai receber requisições na porta 5432 e despachar par aporta 5432
+#    - protocol: TCP
+#      port: 5432
