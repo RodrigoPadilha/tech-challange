@@ -1,4 +1,4 @@
-# tech-challange-fase-1
+# tech-challange
 
 TURMA 1SOAT GRUPO 16 <p>
 Nomes: Rodrigo Padilha dos Santos, Thauã Corrêa Martins <p>
