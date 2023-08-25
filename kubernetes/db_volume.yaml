@@ -10,6 +10,8 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: /Users/rodrigopadilha/Projetos/FIAP/tech-challange-fase-1/db # Caminho no nó do cluster
+    # SO Windows
+    #path: /run/desktop/mnt/host/c/users/NOME_DO_MEU_USUARIO/Documents/POS/branch/tech-challange-fase-1/db
 
 ---
 apiVersion: v1
