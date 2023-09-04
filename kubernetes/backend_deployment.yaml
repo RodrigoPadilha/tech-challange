@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tech-backend-deployment
+#  labels: Precisa adicionar este label????
+#    app: tech-backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tech-backend
+  template:
+    metadata:
+      labels:
+        app: tech-backend
+    spec:
+      containers:
+        - name: tech-backend-container
+          image: rodrigopadilhadossantos/tech_backend:1.1.0
+          resources:
+            requests:
+              cpu: 1m
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            failureThreshold: 30
+            periodSeconds: 10
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: db_host
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: db_port
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: db_user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: db_password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: db_name
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: db_url
+#            - name: DATABASE_URL
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: database-configmap
+#                  key: db_url

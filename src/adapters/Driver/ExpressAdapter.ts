@@ -21,7 +21,7 @@ export class ExpressAdapter implements IHttpServer {
   }
 
   private setupHealthCheck(): void {
-    this.app.get("/", (req, resp) => {
+    this.app.get("/health", (req, resp) => {
       resp.send(`Hello World ${process.env.DB_HOST}: ${process.env.DB_PORT}`);
     });
   }

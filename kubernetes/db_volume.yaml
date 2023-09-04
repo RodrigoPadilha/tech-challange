@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: tech-db-pv
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /Users/rodrigopadilha/Projetos/FIAP/tech-challange-fase-1/db # Caminho no nó do cluster
+    # SO Windows
+    #path: /run/desktop/mnt/host/c/users/NOME_DO_MEU_USUARIO/Documents/POS/branch/tech-challange-fase-1/db
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tech-db-pvc
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
