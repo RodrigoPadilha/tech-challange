@@ -42,9 +42,13 @@ https://miro.com/app/board/uXjVMK9dRs4=/
 ### OpenAPI
 A documentação da API está disponível em http://localhost:3000/docs (após a exeução do projeto) onde você encontrará informações detalhadas sobre os endpoints, parâmetros, exemplos de requisições e respostas, entre outros.
 
-### Documento
+### Documento 1
 
 https://docs.google.com/document/d/1C6u0kgWQNvShfXWhoJ0bHcbBPxhyJGXQ/edit?usp=sharing&ouid=109120616548185377101&rtpof=true&sd=true
+
+### Documento 2
+
+https://docs.google.com/document/d/1N9yhCXZ9NAhR-1NKHrwA7jP6ip1BGajS/edit
 
 ### Collections(Insomnia)
 
@@ -61,6 +65,22 @@ Para executar o projeto localmente, siga as etapas abaixo:
 5. Execute o comando `docker-compose up` para iniciar os containers do banco de dados PostgreSQL e da aplicação.
 6. O servidor estará disponível em [http://localhost:3000].
 
+## Execução de Ambiente Kubernetes
+1. Na pasta kubernetes, ajustar o path do arquivo db_volume.yaml com o diretório da pasta DB que criada na pasta do projeto.
+2. Acessar o diretório da pasta kubernetes e rodar os seguintes comandos para subir a aplicação:
+
+   a. kubectl apply -f backend_secrets.yaml && kubectl apply -f db_secrets.yaml
+
+   b. kubectl apply -f db_volume.yaml
+
+   c. kubectl apply -f backend_service.yaml && kubectl apply -f db_service.yaml
+
+   d. kubectl apply -f db_pod.yaml
+
+   e. kubectl apply -f backend_deployment.yaml
+
+   f. kubectl apply -f backend_hpa.yaml
+ 
 ## Configuração
 
 Você pode configurar algumas variáveis de ambiente para o funcionamento adequado do projeto. Para isso, renomeie o arquivo `.env.example` para `.env` e defina os valores necessários.
