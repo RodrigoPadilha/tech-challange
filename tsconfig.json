@@ -24,7 +24,7 @@
     "baseUrl": ".",     // Caminho inicial para o path fazer o mapeamento
     "paths": {
       // Sempre que um import iniciar com "@models" é feito um mapeamento para o caminho do array
-      "@adapters/*": [ 
+      /* "@adapters/*": [ 
         "./src/adapters/*"
       ],
       "@application/*": [ 
@@ -32,7 +32,13 @@
       ],
       "@domain/*": [ 
         "src/core/domain/*"
+      ], */
+      "@adapters/*": [ 
+        "./src/adapters/*"
       ],
+      "@application/*": [ 
+        "./src/application/*"
+      ],      
     },
   },
    // Config do Jest para poder fazer o import do tsconfig.json em jest.config.js
