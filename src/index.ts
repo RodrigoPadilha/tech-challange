@@ -1,7 +1,7 @@
-import { ExpressAdapter } from "@adapters/Driver/ExpressAdapter";
-import { PrismaConnection } from "@adapters/Driver/PrismaConnection";
-import IHttpServer from "@application/ports/IHttpServer";
-import Router from "src/core/infra/api/Router";
+import { ExpressAdapter } from "src/adapters/ExpressAdapter";
+import { PrismaConnection } from "src/adapters/PrismaConnection";
+import IHttpServer from "@adapters/ports/IHttpServer";
+import Router from "./infra/Router";
 
 const httpServer: IHttpServer = new ExpressAdapter();
 const connection = new PrismaConnection();

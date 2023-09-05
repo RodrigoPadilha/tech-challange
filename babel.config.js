@@ -15,8 +15,7 @@ module.exports = {
       alias: {
         src: './src',
         '@adapters': './src/adapters',
-        '@application': './src/core/application',
-        '@domain': './src/core/domain',        
+        '@application': './src/application',        
       }
     }]
   ],
