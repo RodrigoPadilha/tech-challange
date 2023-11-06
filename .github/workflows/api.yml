@@ -8,8 +8,8 @@ jobs:
     name: "Build Docker Image And Push top ECR"
     runs-on: ubuntu-latest
 
-    env:
-      ECR_REPO_URL: 931751445831.dkr.ecr.us-east-1.amazonaws.com/prod_order-ecr
+    #    env:
+    #      ECR_REPO_URL: 931751445831.dkr.ecr.us-east-1.amazonaws.com/prod_order-ecr
 
     steps:
       - name: Checkout
@@ -23,15 +23,25 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Amazon ECR Login
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and Push Latest ECR Image
+      - name: Build, Tag, and Push the Image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
         run: |
-          cd ../../
-          docker build -t prod_order-ecr -f ./docker/Dockerfile.backend .
-          echo "Built the latest image to ECR"
+          docker build -t $ECR_REGISTRY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY:$IMAGE_TAG
 
-          docker tag prod_order-ecr:latest $ECR_REPO_URL:latest
-
-          docker push $ECR_REPO_URL:latest
-          echo "Pushed the latest image to ECR"
+#      - name: Build and Push Latest ECR Image
+#        run: |
+#          cd ../../
+#          docker build -t prod_order-ecr -f ./docker/Dockerfile.backend .
+#          echo "Built the latest image to ECR"
+#
+#          docker tag prod_order-ecr:latest $ECR_REPO_URL:latest
+#
+#          docker push $ECR_REPO_URL:latest
+#          echo "Pushed the latest image to ECR"
