@@ -27,7 +27,8 @@ jobs:
 
       - name: Build and Push Latest ECR Image
         run: |
-          docker build -t $ECR_REPO_URL/tech_backend:latest .
+          cd ../../docker
+          docker build -t $ECR_REPO_URL/tech_backend:latest -f ./Dockerfile.backend .
           docker push $ECR_REPO_URL/tech_backend:latest
           echo "Built and pushed the latest image to ECR"
         
