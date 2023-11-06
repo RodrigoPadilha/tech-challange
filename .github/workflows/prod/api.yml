@@ -1,0 +1,13 @@
+name: Deploy API Prod
+
+on:
+  workflow_dispatch:
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  build:
+    name: "Build Docker Image And Push top ECR"
+    runs-on: ubuntu-latest
