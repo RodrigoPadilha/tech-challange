@@ -8,9 +8,6 @@ jobs:
     name: "Build Docker Image And Push top ECR"
     runs-on: ubuntu-latest
 
-    #    env:
-    #      ECR_REPO_URL: 931751445831.dkr.ecr.us-east-1.amazonaws.com/prod_order-ecr
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -35,14 +32,3 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./docker/Dockerfile.backend .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-#      - name: Build and Push Latest ECR Image
-#        run: |
-#          cd ../../
-#          docker build -t prod_order-ecr -f ./docker/Dockerfile.backend .
-#          echo "Built the latest image to ECR"
-#
-#          docker tag prod_order-ecr:latest $ECR_REPO_URL:latest
-#
-#          docker push $ECR_REPO_URL:latest
-#          echo "Pushed the latest image to ECR"
